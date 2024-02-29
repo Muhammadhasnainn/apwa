@@ -38,6 +38,26 @@ const ViewCategories = () => {
         }
     }
 
+    const changeStatus = async (elem, st) => {
+        try {
+            axios.put(import.meta.env.VITE_API_URL + `/api/category/edit/${elem.id}`,
+                {
+                    status: st === "active" ? 0 : 1,
+                    name: elem.name
+                },
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        token: Cookies.get("token"),
+                    },
+                })
+            alert("Status changed!")
+            fetchData()
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     useEffect(() => {
         fetchData();
     }, [])
@@ -69,9 +89,11 @@ const ViewCategories = () => {
                                         <td className="px-6 py-4 text-center">{elem.status === 0 ? "ACTIVE" : "NON ACTIVE"}</td>
                                         <td className="px-6 py-4 text-center flex justify-center">
                                             {elem.status === 1 ?
-                                                <button className='px-3 py-1 bg-blue-700 me-3 text-white'>Mark Active</button>
+                                                <button className='px-3 py-1 bg-blue-700 me-3 text-white'
+                                                    onClick={() => changeStatus(elem, "active")}>Mark Active</button>
                                                 :
-                                                <button className='px-3 py-1 bg-blue-700 me-3 text-white'>Mark Not Active</button>
+                                                <button className='px-3 py-1 bg-blue-700 me-3 text-white'
+                                                    onClick={() => changeStatus(elem, "not")}>Mark Not Active</button>
                                             }
                                             <button className='px-3 py-1 bg-red-700 text-white'
                                                 onClick={() => DeleteCategory(elem.id)}>Delete</button>

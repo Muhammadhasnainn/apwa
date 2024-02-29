@@ -5,6 +5,7 @@ import axios from "axios";
 import jwt_decode from "jwt-decode"
 import Cookies from "js-cookie";
 import { useAuthContext } from '../Context/AuthContext';
+import logo from "../assets/apwalogo.png"
 
 function Signin() {
     const [cred, setCred] = useState({email: "", password: ""})
@@ -43,7 +44,7 @@ function Signin() {
             <div className=" flex justify-around align-middle ">
                 <div className="  sm:block logo flex justify-center items-center h-full">
                     <div className="wrapper flex justify-center items-center">
-                        <img src="/public/apwalogo.png" className="block w-96 md:mt-60"
+                        <img src={logo} className="block w-96 md:mt-60"
                          alt="Logo"/>
                     </div>
                 </div>

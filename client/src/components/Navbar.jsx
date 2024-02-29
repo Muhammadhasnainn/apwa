@@ -2,6 +2,7 @@ import Cookies from 'js-cookie'
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuthContext } from '../Context/AuthContext'
+import logo from "../assets/apwalogo.png"
 
 export const Navbar = () => {
   const {setUser} = useAuthContext()
@@ -14,7 +15,7 @@ const navigate = useNavigate()
         {/* Logo or Brand */}
         <div className="text-center">
           <span className="text-lg font-bold">
-            <img src="/public/apwalogo.png" className="" alt="Logo" />
+            <img src={logo} className="" alt="Logo" />
           </span>
         </div>
         <hr className="my-4 border-gray-300" />

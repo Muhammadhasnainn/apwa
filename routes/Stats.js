@@ -1,18 +1,8 @@
 const express = require("express");
-const mysql = require("mysql2");
+const db = require("../config/db");
 const { verifyToken } = require("../middlewares/verify");
 
 const router = express.Router();
-
-const db = mysql.createConnection({
-  host: process.env.host,
-  user: process.env.user,
-  password: process.env.password,
-  database: process.env.database,
-  waitForConnections: true,
-  connectionLimit: 100,
-  queueLimit: 0,
-});
 
 // Sale Products total
 router.get("/sales", verifyToken, async (req, res) => {

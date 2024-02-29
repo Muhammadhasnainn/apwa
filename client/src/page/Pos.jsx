@@ -130,7 +130,7 @@ const Pos = () => {
                                     defaultValue="" // Set default value if needed
                                 >
                                     <option value="" disabled>Select a category</option>
-                                    {category.map((elem) => {
+                                    {category?.map((elem) => {
                                         return <option value={elem.name}>{elem.name}</option>
                                     })}
                                 </select>
@@ -151,7 +151,7 @@ const Pos = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {selected.length > 0 ? selected.map((elem, i) => {
+                                    {selected.length > 0 ? selected?.map((elem, i) => {
                                         return <tr>
                                             <td className="border px-4 py-2">{elem.name}</td>
                                             <td className="border px-4 py-2">{elem.price}</td>
@@ -175,8 +175,8 @@ const Pos = () => {
                                             </td>
                                         </tr>
                                     }) : <tr>
-                                            <td className="border px-4 py-2 text-center" colSpan={5}>No Products Selected</td>
-                                        </tr>}
+                                        <td className="border px-4 py-2 text-center" colSpan={5}>No Products Selected</td>
+                                    </tr>}
                                 </tbody>
                             </table>
                         </div>
@@ -222,7 +222,7 @@ const Pos = () => {
                         {/* Fourth Card Content */}
                         <h2 className="text-lg font-bold text-gray-800 mb-4">Products</h2>
                         <div className="grid grid-cols-3 gap-4">
-                            {Fproducts.map((elem) => {
+                            {Fproducts?.map((elem) => {
                                 return <div className="bg-gray-100 p-4 rounded-lg shadow-md cursor-pointer"
                                     onClick={() => {
                                         const elementToAdd = { ...elem, quantity: 1, subtotal: 1 * elem.price };

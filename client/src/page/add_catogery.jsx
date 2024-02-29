@@ -13,19 +13,23 @@ export default function Add_catogery() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { data } = await axios.post(import.meta.env.VITE_API_URL + "/api/category/add",
-      {
-        
-        ...inputsdata
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          token: Cookies.get("token"),
+    try {
+      const { data } = await axios.post(import.meta.env.VITE_API_URL + "/api/category/add",
+        {
+
+          ...inputsdata
         },
-      })
-    alert(data.message)
-    setInputsData({})
+        {
+          headers: {
+            "Content-Type": "application/json",
+            token: Cookies.get("token"),
+          },
+        })
+      alert(data.message)
+      setInputsData({name: "", status: ""})
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
@@ -40,7 +44,7 @@ export default function Add_catogery() {
 
               <div className="w-full px-4 mb-4">
                 <label htmlFor="stock" className="text-left block text-sm font-medium text-gray-700 mb-1">Name</label>
-                <input id="name" type="text" name="name" onChange={handleChange} className="w-full py-2 px-3 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-500" placeholder="Enter Name" />
+                <input id="name" type="text" name="name" onChange={handleChange} className="w-full py-2 px-3 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-500" placeholder="Enter Name" value={inputsdata.name} />
               </div>
               <div className="w-full  px-4 mb-4">
                 <label htmlFor="category" className="text-left block text-sm font-medium text-gray-700 mb-1">Status</label>
@@ -48,8 +52,9 @@ export default function Add_catogery() {
                   name="status"
                   id="status"
                   className="w-full py-2 px-3 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-500"
-                  defaultValue="" // Set
+                  defaultValue=""
                   onChange={handleChange}
+                  value={inputsdata.status}
                 >
                   <option value="" disabled>Select a category</option>
                   <option value="0">Active</option>

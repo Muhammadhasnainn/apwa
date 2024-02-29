@@ -4,6 +4,11 @@ import { useAuthContext } from '../Context/AuthContext';
 import { Navigate, useNavigate } from 'react-router';
 import Cookies from 'js-cookie';
 import axios from 'axios';
+import saleimg from "../assets/Sales.png"
+import revenueimg from "../assets/Revenue.png"
+import puricon from "../assets/Purchase.png"
+import quanimg from "../assets/Quantity.png"
+import wayImg from "../assets/On the way.png"
 
 function Dashboard() {
     const [Tsales, setTsales] = useState("");
@@ -62,7 +67,7 @@ function Dashboard() {
             });
 
 
-            
+
             const purchasesreturn = await axios.get(import.meta.env.VITE_API_URL + "/api/stats/returnpurchases", {
                 headers: {
                     "Content-Type": "application/json",
@@ -71,15 +76,12 @@ function Dashboard() {
             });
 
 
-            setTsales(totalSales.data.grandTotal);
-            setMsales(monthlySales.data.grandTotal);
-            setTpurchase(Purchased.data.grandTotal)
-            setMpurchase(monthlyPurchased.data.grandTotal)
-            setSalesR(salesreturn.data.grandTotal)
-            setPurchasedR(purchasesreturn.data.grandTotal)
-
-
-
+            setTsales(totalSales.data.grandTotal ? totalSales.data.grandTotal : 0);
+            setMsales(monthlySales.data.grandTotal ? monthlySales.data.grandTotal : 0);
+            setTpurchase(Purchased.data.grandTotal ? Purchased.data.grandTotal : 0)
+            setMpurchase(monthlyPurchased.data.grandTotal ? monthlyPurchased.data.grandTotal : 0)
+            setSalesR(salesreturn.data.grandTotal ? salesreturn.data.grandTotal : 0)
+            setPurchasedR(purchasesreturn.data.grandTotal ? purchasesreturn.data.grandTotal : 0)
         } catch (error) {
             console.error("Error fetching data:", error);
         }
@@ -106,25 +108,25 @@ function Dashboard() {
                         <div className="flex">
                             {/* Column 1 */}
                             <div className="text-center flex-1 flex flex-col items-center">
-                                <img src="/public/sales.png" alt="Sales Icon" className="w-12 h-12 mb-2" />
+                                <img src={saleimg} alt="Sales Icon" className="w-12 h-12 mb-2" />
                                 <p className="text-base mb-1">Sales</p>
                                 <p className="font-bold text-gray-600 text-2xl">$ {Number(Tsales).toLocaleString()}</p>
                             </div>
                             {/* Column 2 */}
                             <div className="text-center flex-1 flex flex-col items-center">
-                                <img src="/public/Revenue.png" alt="Revenue Icon" className="w-12 h-12 mb-2" />
+                                <img src={revenueimg} alt="Revenue Icon" className="w-12 h-12 mb-2" />
                                 <p className="text-base  mb-1">Month Sales</p>
                                 <p className="font-bold text-gray-600 text-2xl">$ {Number(Msales).toLocaleString()} </p>
                             </div>
                             {/* Column 3 */}
                             <div className="text-center flex-1 flex flex-col items-center">
-                                <img src="/public/Revenue.png" alt="Revenue Icon" className="w-12 h-12 mb-2" />
+                                <img src={puricon} alt="Revenue Icon" className="w-12 h-12 mb-2" />
                                 <p className="text-base  mb-1">Purchases</p>
                                 <p className="font-bold text-gray-600 text-2xl">$ {Number(Tpurchase).toLocaleString()} </p>
                             </div>
                             {/* Column 4 */}
                             <div className="text-center flex-1 flex flex-col items-center">
-                                <img src="/public/Revenue.png" alt="Revenue Icon" className="w-12 h-12 mb-2" />
+                                <img src={revenueimg} alt="Revenue Icon" className="w-12 h-12 mb-2" />
                                 <p className="text-base mb-1">Month Purchase</p>
                                 <p className="font-bold text-gray-600 text-2xl">$ {Number(Mpurchase).toLocaleString()} </p>
                             </div>
@@ -134,13 +136,13 @@ function Dashboard() {
                         <h2 className="text-lg text-left font-semibold mb-4">Returns</h2>
                         <div className="flex">
                             <div className="text-center flex-1 flex flex-col items-center">
-                                <img src="/public/Quantity.png" alt="Sales Icon" className="w-12 h-12 mb-2" />
+                                <img src={quanimg} alt="Sales Icon" className="w-12 h-12 mb-2" />
                                 <p className="text-2xl text-gray-600">$ {salesR}</p>
 
                                 <p className="text-base mb-1">POS returns</p>
                             </div>
                             <div className="text-center flex-1 flex flex-col items-center">
-                                <img src="/public/On the way.png" alt="Revenue Icon" className="w-12 h-12 mb-2" />
+                                <img src={wayImg} alt="Revenue Icon" className="w-12 h-12 mb-2" />
                                 <p className="text-2xl text-gray-600">${purchasedR}</p>
 
                                 <p className="text-base mb-1">To be received</p>

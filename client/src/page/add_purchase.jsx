@@ -111,7 +111,7 @@ const Pos = () => {
                   type="text"
                   name="supplier"
                   id="supplier"
-                  className="block w-full border-gray-300 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2"
+                  className="block w-full outline-none border-gray-300 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2"
                   placeholder="Select a supplier"
                   onChange={handleChange}
                 />
@@ -200,7 +200,7 @@ const Pos = () => {
           <div className="p-4">
             <h2 className="text-lg font-bold text-gray-800 mb-4">Products</h2>
             <div className="grid grid-cols-3 gap-4">
-              {Fproducts.map((elem) => {
+              {Fproducts?.map((elem) => {
                 return <div className="bg-gray-100 p-4 rounded-lg shadow-md cursor-pointer"
                   onClick={() => {
                     const elementToAdd = { ...elem, quantity: 1, subtotal: 1 * elem.price };

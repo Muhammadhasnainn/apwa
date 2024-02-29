@@ -1,41 +1,14 @@
 const express = require("express");
-const mysql = require("mysql2");
+const db = require("../config/db");
 
 const { verifyToken } = require("../middlewares/verify");
 
 const router = express.Router();
 
-const db = mysql.createConnection({
-  host: process.env.host,
-  user: process.env.user,
-  password: process.env.password,
-  database: process.env.database,
-  waitForConnections: true,
-  connectionLimit: 100,
-  queueLimit: 0,
-});
-
 // ADD POS
 router.post("/add", verifyToken, async (req, res) => {
   try {
-    const createPurQuery = `
-    CREATE TABLE IF NOT EXISTS pos (
-    id int NOT NULL AUTO_INCREMENT,
-    category varchar(75) NOT NULL,
-    customer varchar(75) NOT NULL,
-    products json NOT NULL,
-    total int NOT NULL,
-    \`return\` tinyint NOT NULL DEFAULT '0',
-    date datetime NOT NULL,
-    PRIMARY KEY (id)
-  )
-`;
-
-  db.query(createPurQuery, (err, result) => {
-    if (err) {
-      console.error("Error creating 'supplier' table:", err);
-    } else {
-
+    
     const insertQuery =
       "INSERT INTO pos (`category`,  `products` , `customer`, `total`, `date`) VALUES (?, ?, ?,  ?, ?)";
 
@@ -73,8 +46,6 @@ router.post("/add", verifyToken, async (req, res) => {
         res.json({ id: result.insertId, message: "Added successfully" });
       }
     );
-    }
-  })
   } catch (error) {
     console.log(error);
   }

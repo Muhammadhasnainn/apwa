@@ -88,7 +88,7 @@ export default function Add_product() {
                 <select name="category" id="category" className="w-full py-2 px-3 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-500" defaultValue=""
                   onChange={handleChange}>
                   <option value="" disabled>Select a category</option>
-                  {category.map((elem) => {
+                  {category?.map((elem) => {
                     return <option value={elem.name}>{elem.name}</option>
                   })}
                 </select>
