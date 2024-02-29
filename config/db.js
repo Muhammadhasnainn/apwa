@@ -17,6 +17,7 @@ const db = mysql.createPool({
 //     database: process.env.database,
 //   });
 
+
 // Handle connection errors
 db.getConnection((err, connection) => {
   if (err) {

@@ -18,7 +18,7 @@ router.post("/add", verifyToken, async (req, res) => {
       db.query(updateStockQuery, [product.quantity, product.id], (err) => {
         if (err) {
           console.log(err);
-          return res.json({ message: "Error updating product stock" });
+          return res.status(500).json({ message: "Error updating product stock" });
         }
       });
     });
@@ -40,7 +40,7 @@ router.post("/add", verifyToken, async (req, res) => {
       (err, result) => {
         if (err) {
           console.log(err);
-          return res.json({ message: "Error adding new POS" });
+          return res.status(500).json({ message: "Error adding new POS" });
         }
 
         res.json({ id: result.insertId, message: "Added successfully" });

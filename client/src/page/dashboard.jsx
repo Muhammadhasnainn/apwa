@@ -4,11 +4,12 @@ import { useAuthContext } from '../Context/AuthContext';
 import { Navigate, useNavigate } from 'react-router';
 import Cookies from 'js-cookie';
 import axios from 'axios';
-import saleimg from "../assets/Sales.png"
-import revenueimg from "../assets/Revenue.png"
-import puricon from "../assets/Purchase.png"
-import quanimg from "../assets/Quantity.png"
-import wayImg from "../assets/On the way.png"
+import { FcSalesPerformance } from "react-icons/fc";
+import { FaCalendarAlt } from "react-icons/fa";
+import { BiSolidPurchaseTagAlt } from "react-icons/bi";
+import { MdPointOfSale } from "react-icons/md";
+import { MdAssignmentReturned } from "react-icons/md";
+
 
 function Dashboard() {
     const [Tsales, setTsales] = useState("");
@@ -99,53 +100,73 @@ function Dashboard() {
             {/* Left Navbar */}
             <Navbar />
             {/* Body */}
-            <div className="flex flex-col flex-grow p-8 ml-[200px]">
-                <h1 className="text-3xl font-bold mb-8 text-center">Dashboard</h1>
+            <div className="flex flex-col flex-grow py-8 px-10 ml-[225px]">
+                <h1 className="text-3xl font-bold mb-8">Dashboard</h1>
                 <div className="flex "> {/* Flex container for cards */}
                     {/* Sales Overview Card */}
                     <div className="bg-white rounded-lg p-4 shadow-lg ml-3 " style={{ flex: 2, maxHeight: '12rem' }}> {/* Sales Overview card takes up 2/3 of the space */}
                         <h2 className="text-lg text-left font-semibold mb-4">Sales Overview</h2>
                         <div className="flex">
                             {/* Column 1 */}
-                            <div className="text-center flex-1 flex flex-col items-center">
-                                <img src={saleimg} alt="Sales Icon" className="w-12 h-12 mb-2" />
-                                <p className="text-base mb-1">Sales</p>
-                                <p className="font-bold text-gray-600 text-2xl">$ {Number(Tsales).toLocaleString()}</p>
+                            <div className="text-center flex-1 flex flex-col items-center justify-between">
+                                {/* <img src={saleimg} alt="Sales Icon" className="w-12 h-12 mb-2" /> */}
+                                <FcSalesPerformance size={50} />
+                                <div>
+                                    <p className="text-base mb-1">Sales</p>
+                                    <p className="text-2xl">$ {Number(Tsales).toLocaleString()}</p>
+                                </div>
                             </div>
                             {/* Column 2 */}
-                            <div className="text-center flex-1 flex flex-col items-center">
-                                <img src={revenueimg} alt="Revenue Icon" className="w-12 h-12 mb-2" />
-                                <p className="text-base  mb-1">Month Sales</p>
-                                <p className="font-bold text-gray-600 text-2xl">$ {Number(Msales).toLocaleString()} </p>
+                            <div className="text-center flex-1 flex flex-col items-center justify-between">
+                                {/* <img src={revenueimg} alt="Revenue Icon" className="w-12 h-12 mb-2" /> */}
+                                <FaCalendarAlt size={45} color='#3498db' />
+                                <div>
+                                    <p className="text-base  mb-1">Month Sales</p>
+                                    <p className=" text-2xl">$ {Number(Msales).toLocaleString()} </p>
+                                </div>
                             </div>
                             {/* Column 3 */}
-                            <div className="text-center flex-1 flex flex-col items-center">
-                                <img src={puricon} alt="Revenue Icon" className="w-12 h-12 mb-2" />
-                                <p className="text-base  mb-1">Purchases</p>
-                                <p className="font-bold text-gray-600 text-2xl">$ {Number(Tpurchase).toLocaleString()} </p>
+                            <div className="text-center flex-1 flex flex-col items-center justify-between">
+                                {/* <img src={puricon} alt="Revenue Icon" className="w-12 h-12 mb-2" /> */}
+                                <BiSolidPurchaseTagAlt size={50} color='#FFA000' />
+                                <div>
+                                    <p className="text-base  mb-1">Purchases</p>
+                                    <p className=" text-2xl">$ {Number(Tpurchase).toLocaleString()} </p>
+                                </div>
                             </div>
                             {/* Column 4 */}
-                            <div className="text-center flex-1 flex flex-col items-center">
-                                <img src={revenueimg} alt="Revenue Icon" className="w-12 h-12 mb-2" />
-                                <p className="text-base mb-1">Month Purchase</p>
-                                <p className="font-bold text-gray-600 text-2xl">$ {Number(Mpurchase).toLocaleString()} </p>
+                            <div className="text-center flex-1 flex flex-col items-center justify-between">
+                                {/* <img src={revenueimg} alt="Revenue Icon" className="w-12 h-12 mb-2" /> */}
+                                <FaCalendarAlt size={45} color='#3498db' />
+                                <div>
+                                    <p className="text-base mb-1">Month Purchase</p>
+                                    <p className=" text-2xl">$ {Number(Mpurchase).toLocaleString()} </p>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div className="bg-white rounded-lg p-4 shadow-lg ml-3" style={{ flex: 1, maxHeight: '12rem' }}>
                         <h2 className="text-lg text-left font-semibold mb-4">Returns</h2>
                         <div className="flex">
-                            <div className="text-center flex-1 flex flex-col items-center">
-                                <img src={quanimg} alt="Sales Icon" className="w-12 h-12 mb-2" />
-                                <p className="text-2xl text-gray-600">$ {salesR}</p>
+                            <div className="text-center flex-1 flex flex-col items-center justify-between">
+                                {/* <img src={quanimg} alt="Sales Icon" className="w-12 h-12 mb-2" /> */}
+                                <MdPointOfSale size={45} color='#3498db' />
+                                <div>
 
-                                <p className="text-base mb-1">POS returns</p>
+                                    <p className="text-base mb-1">POS returns</p>
+                                    <p className="text-2xl text-gray-600">$ {salesR}</p>
+
+                                </div>
                             </div>
-                            <div className="text-center flex-1 flex flex-col items-center">
-                                <img src={wayImg} alt="Revenue Icon" className="w-12 h-12 mb-2" />
-                                <p className="text-2xl text-gray-600">${purchasedR}</p>
+                            <div className="text-center flex-1 flex flex-col items-center justify-between">
+                                {/* <img src={wayImg} alt="Revenue Icon" className="w-12 h-12 mb-2" /> */}
+                                <MdAssignmentReturned size={45} color='#3498db' />
+                                <div>
+                                    <p className="text-base mb-1">To be received</p>
+                                    <p className="text-2xl text-gray-600">${purchasedR}</p>
 
-                                <p className="text-base mb-1">To be received</p>
+
+                                </div>
                             </div>
                         </div>
                     </div>

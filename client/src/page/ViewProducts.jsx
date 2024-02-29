@@ -66,18 +66,18 @@ const ViewProducts = () => {
     }, [])
 
     return (
-        <div className='bg-gray-100 ml-[200px] min-h-screen'>
+        <div className='bg-gray-100  min-h-screen'>
             <Navbar />
 
-            <div className="bg-gray-100 min-h-screen">
-                <div className="container mx-auto px-4 py-8">
+            <div className="bg-gray-100 min-h-screen py-8 px-10 ml-[225px]">
+                <div className="container mx-auto">
                     <h1 className="text-3xl font-bold text-gray-800 mb-4">Our Products</h1>
                     {/* <p className="text-lg text-gray-600 mb-8">Browse our latest collection of products designed to enhance your lifestyle.</p> */}
 
-                    <div className="overflow-x-auto">
+                    <div className="overflow-x-auto rounded-b-xl shadow">
                         <table className="table-auto w-full border-collapse">
                             <thead>
-                                <tr className="bg-gray-200 text-gray-700 uppercase">
+                                <tr className=" bg-gray-900 text-white uppercase">
                                     <th className="px-6 py-4">Product Name</th>
                                     <th className="px-6 py-4">Model</th>
                                     <th className="px-6 py-4">Item code</th>

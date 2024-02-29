@@ -3,12 +3,14 @@ import { Navbar } from '../components/Navbar';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { MdDelete } from 'react-icons/md';
+import Invoice from '../components/Invoice';
 
 const Pos = () => {
     const [inputsdata, setInputsData] = useState({});
     const [category, setcategory] = useState([]);
     const [products, setProducts] = useState([]);
     const [selected, setSelected] = useState([]);
+    const [show, setShow] = useState(false);
     const [Fproducts, setFproducts] = useState([]);
     const [total, setTotal] = useState(0)
 
@@ -18,23 +20,28 @@ const Pos = () => {
     }
 
     const handleSubmit = async () => {
-        const totalAmount = selected.reduce((prev, curr) => prev + curr.subtotal, 0);
+        try {
+            const totalAmount = selected.reduce((prev, curr) => prev + curr.subtotal, 0);
 
-        const { data } = await axios.post(import.meta.env.VITE_API_URL + "/api/pos/add",
-            {
-                ...inputsdata,
-                total: totalAmount,
-                products: selected
-            },
-            {
-                headers: {
-                    "Content-Type": "application/json",
-                    token: Cookies.get("token"),
+            const { data } = await axios.post(import.meta.env.VITE_API_URL + "/api/pos/add",
+                {
+                    ...inputsdata,
+                    total: totalAmount,
+                    products: selected
                 },
-            })
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        token: Cookies.get("token"),
+                    },
+                })
 
-        alert(data.message)
-        setSelected([])
+            alert(data.message)
+            setShow(true)
+        } catch (error) {
+            console.log(error);
+            alert(error?.response?.data?.message)
+        }
     }
 
     useEffect(() => {
@@ -62,17 +69,22 @@ const Pos = () => {
         FETCHDATA()
     }, [])
 
+    const handleQuantityChange = (id, change, price) => {
+        const index = selected.findIndex(item => item.idd === id);
+        if (index !== -1) {
+            const updatedSelected = [...selected];
+            updatedSelected[index].quantity += Number(change);
 
+            if (updatedSelected[index].quantity < 1) {
+                updatedSelected[index].quantity = 1;
+            } else {
+                updatedSelected[index].subtotal = price * updatedSelected[index].quantity;
+            }
 
-    const handleQuantityChange = (index, change, price) => {
-        const updatedSelected = [...selected];
-        updatedSelected[index].quantity += Number(change);
-        if (updatedSelected[index].quantity < 1) {
-            updatedSelected[index].quantity = 1;
+            setSelected(updatedSelected);
         } else {
-            updatedSelected[index].subtotal = price * updatedSelected[index].quantity;
+            console.error(`Item with id ${id} not found in the selected array.`);
         }
-        setSelected(updatedSelected);
     };
 
 
@@ -95,16 +107,16 @@ const Pos = () => {
 
 
     return (
-        <div className="flex flex-col min-h-screen bg-gray-100">
+        <div className="flex flex-col min-h-screen bg-gray-100 py-8 px-10 ">
             {/* Heading */}
-            <h1 className="text-3xl font-bold mb-4 text-center p-8">Create Sale</h1>
+            <h1 className="text-3xl font-bold mb-4 ml-[225px]">Create Sale</h1>
 
             {/* Navbar */}
             <Navbar />
 
-            <div className="grid grid-cols-2 gap-8 ml-[220px]">
+            <div className="grid grid-cols-2 gap-8 ml-[220px] justify-between">
                 {/* First Card */}
-                <div className="w-[85%] h-[99%] bg-white rounded-lg shadow-md overflow-hidden">
+                <div className="w-[100%] h-[99%] bg-white rounded-lg shadow-md overflow-hidden">
                     <div className="p-4">
                         {/* Client Selection Input */}
                         <div className="mb-4">
@@ -114,7 +126,7 @@ const Pos = () => {
                                     type="text"
                                     name="client"
                                     id="customer"
-                                    className="block w-full border-gray-300 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2"
+                                    className="block outline-none w-full border-gray-300 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2"
                                     placeholder="Select a client"
                                     onChange={handleChange}
                                 />
@@ -143,7 +155,6 @@ const Pos = () => {
                                 <thead>
                                     <tr>
                                         <th className="border px-4 py-2">Product</th>
-                                        <th className="border px-4 py-2">Price</th>
                                         <th className="border px-4 py-2 text-center">Quantity</th>
                                         <th className="border px-4 py-2 text-center">Price</th>
                                         <th className="border px-4 py-2 text-center">Subtotal</th>
@@ -154,11 +165,10 @@ const Pos = () => {
                                     {selected.length > 0 ? selected?.map((elem, i) => {
                                         return <tr>
                                             <td className="border px-4 py-2">{elem.name}</td>
-                                            <td className="border px-4 py-2">{elem.price}</td>
                                             <td className="border px-4 py-2" style={{ whiteSpace: "nowrap" }}>
                                                 <button className='bg-red-600 text-white px-2'
                                                     onClick={() => handleQuantityChange(i, -1, elem.price)}>-</button>
-                                                <input className='mx-3 w-6' value={elem?.quantity}
+                                                <input className='mx-3 w-6 text-center' value={elem?.quantity}
                                                     onChange={(e) => handleQuantityInput(i, e.target.value, elem.price)} type='number' />
                                                 <button className='bg-blue-800 text-white px-2'
                                                     onClick={() => handleQuantityChange(i, 1, elem.price)}>+</button>
@@ -184,7 +194,7 @@ const Pos = () => {
                 </div>
 
                 {/* Second Card */}
-                <div className="bg-white w-[85%] h-[99%] rounded-lg shadow-md overflow-hidden">
+                <div className="bg-white w-[100%] h-[99%] rounded-lg shadow-md overflow-hidden">
                     <div className="p-4">
                         {/* Third Card Content */}
                         <div className="col-md-12 form-group">
@@ -222,16 +232,18 @@ const Pos = () => {
                         {/* Fourth Card Content */}
                         <h2 className="text-lg font-bold text-gray-800 mb-4">Products</h2>
                         <div className="grid grid-cols-3 gap-4">
-                            {Fproducts?.map((elem) => {
+                            {Fproducts?.map((elem, i) => {
                                 return <div className="bg-gray-100 p-4 rounded-lg shadow-md cursor-pointer"
                                     onClick={() => {
-                                        const elementToAdd = { ...elem, quantity: 1, subtotal: 1 * elem.price };
+                                        const elementToAdd = { ...elem, idd: i, quantity: 1, subtotal: 1 * elem.price };
                                         if (!selected.some(selectedElem => {
                                             const { subtotal: subtotal1, quantity: quantity1, ...newObject } = selectedElem;
                                             const { subtotal: subtotal2, quantity: quantity2, ...newObject2 } = elementToAdd;
                                             return JSON.stringify(newObject) === JSON.stringify(newObject2)
                                         })) {
                                             setSelected([...selected, elementToAdd]);
+                                        } else {
+                                            handleQuantityChange(elementToAdd.idd, 1, elem.price)
                                         }
                                     }} >
                                     <h3 className="text-gray-800 font-bold">{elem.name}</h3>
@@ -255,14 +267,16 @@ const Pos = () => {
 
             {/* <!-- Button --> */}
             <div className="col-12 col-lg-5 mb-1 py-4">
-                <button className="bg-blue-500 ml-[220px] hover:bg-blue-700 text-white font-bold py-2 px-20 "
+                <button className="bg_primary  ml-[220px] hover:bg-blue-700 text-white font-bold py-2 px-20 "
                     onClick={handleSubmit}>
                     <i className="fas fa-save"></i> Save
                 </button>
             </div>
 
-
-
+            {show && <Invoice close={() => setShow(false)} inputsdata={inputsdata}
+                products={selected}
+                total={total}
+            />}
         </div>
 
     );
