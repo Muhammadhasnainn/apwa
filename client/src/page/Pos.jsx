@@ -247,7 +247,7 @@ const Pos = () => {
                                         }
                                     }} >
                                     <h3 className="text-gray-800 font-bold">{elem.name}</h3>
-                                    <p className="text-gray-600">${elem.price}</p>
+                                    <p className="text-gray-600">RS {elem.price}</p>
                                 </div>
                             })}
                         </div>
@@ -260,7 +260,7 @@ const Pos = () => {
                 <div className="p-4">
                     {/* <!-- Third Card Content --> */}
                     <div className="text-center text-2xl w-50 h-17 font-bold bg-blue-950 bg-opacity-20 p-4">
-                        Net Total: $ {total.toLocaleString()}
+                        Net Total: RS {total.toLocaleString()}
                     </div>
                 </div>
             </div>

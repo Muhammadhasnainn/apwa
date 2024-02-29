@@ -48,7 +48,7 @@ const ViewPurchase = () => {
                     return <tr key={elem.id} className="border-b border-gray-100">
                      <td className="px-6 py-4 text-center">{elem.supplier}</td>
                    <td className="px-6 py-4 text-center">{elem.products.map((el, i)=> `${el.name} ${i !== (elem.products.length - 1) ? ", " : " "}`)}</td>
-                   <td className="px-6 py-4 text-center">{Number(elem.total).toLocaleString()}</td>
+                   <td className="px-6 py-4 text-center">RS {Number(elem.total).toLocaleString()}</td>
                    <td className="px-6 py-4 text-center flex">
                     <MdEdit size={30} color='blue' className='mx-auto'/>
                     </td>

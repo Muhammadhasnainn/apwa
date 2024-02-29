@@ -113,7 +113,7 @@ function Dashboard() {
                                 <FcSalesPerformance size={50} />
                                 <div>
                                     <p className="text-base mb-1">Sales</p>
-                                    <p className="text-2xl">$ {Number(Tsales).toLocaleString()}</p>
+                                    <p className="text-2xl">RS {Number(Tsales).toLocaleString()}</p>
                                 </div>
                             </div>
                             {/* Column 2 */}
@@ -122,7 +122,7 @@ function Dashboard() {
                                 <FaCalendarAlt size={45} color='#3498db' />
                                 <div>
                                     <p className="text-base  mb-1">Month Sales</p>
-                                    <p className=" text-2xl">$ {Number(Msales).toLocaleString()} </p>
+                                    <p className=" text-2xl">RS {Number(Msales).toLocaleString()} </p>
                                 </div>
                             </div>
                             {/* Column 3 */}
@@ -131,7 +131,7 @@ function Dashboard() {
                                 <BiSolidPurchaseTagAlt size={50} color='#FFA000' />
                                 <div>
                                     <p className="text-base  mb-1">Purchases</p>
-                                    <p className=" text-2xl">$ {Number(Tpurchase).toLocaleString()} </p>
+                                    <p className=" text-2xl">RS {Number(Tpurchase).toLocaleString()} </p>
                                 </div>
                             </div>
                             {/* Column 4 */}
@@ -140,7 +140,7 @@ function Dashboard() {
                                 <FaCalendarAlt size={45} color='#3498db' />
                                 <div>
                                     <p className="text-base mb-1">Month Purchase</p>
-                                    <p className=" text-2xl">$ {Number(Mpurchase).toLocaleString()} </p>
+                                    <p className=" text-2xl">RS {Number(Mpurchase).toLocaleString()} </p>
                                 </div>
                             </div>
                         </div>
@@ -154,7 +154,7 @@ function Dashboard() {
                                 <div>
 
                                     <p className="text-base mb-1">POS returns</p>
-                                    <p className="text-2xl text-gray-600">$ {salesR}</p>
+                                    <p className="text-2xl text-gray-600">RS {salesR}</p>
 
                                 </div>
                             </div>
@@ -163,7 +163,7 @@ function Dashboard() {
                                 <MdAssignmentReturned size={45} color='#3498db' />
                                 <div>
                                     <p className="text-base mb-1">To be received</p>
-                                    <p className="text-2xl text-gray-600">${purchasedR}</p>
+                                    <p className="text-2xl text-gray-600">RS {purchasedR}</p>
 
 
                                 </div>

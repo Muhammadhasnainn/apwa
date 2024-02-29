@@ -80,7 +80,7 @@ const ViewProducts = () => {
                                 <tr className=" bg-gray-900 text-white uppercase">
                                     <th className="px-6 py-4">Product Name</th>
                                     <th className="px-6 py-4">Model</th>
-                                    <th className="px-6 py-4">Item code</th>
+                                    <th className="px-6 py-4">Stock</th>
                                     <th className="px-6 py-4">Price</th>
                                     <th className="px-6 py-4">Action</th>
                                 </tr>
@@ -90,8 +90,8 @@ const ViewProducts = () => {
                                     return <tr key={elem.id} className="border-b border-gray-100">
                                         <td className="px-6 py-4 text-center">{elem.name}</td>
                                         <td className="px-6 py-4 text-center">{elem.model}</td>
-                                        <td className="px-6 py-4 text-center">{elem.itemcode}</td>
-                                        <td className="px-6 py-4 text-center">{elem.price}</td>
+                                        <td className="px-6 py-4 text-center">{elem.stock}</td>
+                                        <td className="px-6 py-4 text-center">RS {elem.price}</td>
                                         <td className="px-6 py-4 text-center flex">
                                             <MdEdit size={30} color='blue' className='me-3'
                                                 cursor={"pointer"}

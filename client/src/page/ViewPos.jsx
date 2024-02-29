@@ -53,19 +53,19 @@ const ViewPOS = () => {
                                 {POS?.map((elem) => {
                                     return <tr key={elem.id} className="border-b border-gray-100">
                                         <td className="px-6 py-4 text-center">{elem.customer}</td>
-                                        <td className="px-6 py-4 text-center">{elem.products.map((elem) => elem.name)}</td>
-                                        <td className="px-6 py-4 text-center">{Number(elem.total).toLocaleString()}</td>
+                                        <td className="px-6 py-4 text-center">{elem.products.map((elem) => `${elem.name} `)}</td>
+                                        <td className="px-6 py-4 text-center">RS {Number(elem.total).toLocaleString()}</td>
                                         <td className="px-6 py-4">
                                             <div className='flex justify-center'>
                                                 <MdEdit size={30} color='blue' className='' />
                                                 <button className='bg_primary px-5 py-2 rounded text-white ms-3'
-                                                onClick={()=> {
-                                                    const {products, ...data} = elem;
-                                                    setSelected(products)
-                                                    setInputsData(data)
-                                                    setTotal(elem.total)
-                                                    setShow(true)
-                                                }}>View</button>
+                                                    onClick={() => {
+                                                        const { products, ...data } = elem;
+                                                        setSelected(products)
+                                                        setInputsData(data)
+                                                        setTotal(elem.total)
+                                                        setShow(true)
+                                                    }}>View</button>
                                             </div>
                                         </td>
                                     </tr>

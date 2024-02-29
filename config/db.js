@@ -1,21 +1,21 @@
 const mysql = require('mysql2');
 
-const db = mysql.createPool({
-  connectionLimit: 10, // Maximum number of connections in the pool
-  host: "localhost",
-  user: "orientso_apwainventory",
-  password: '1234',
-  database: "orientso_apwainventory",
-});
-
-
 // const db = mysql.createPool({
-//     connectionLimit: 10,
-//     host: process.env.host,
-//     user: process.env.user,
-//     password: process.env.password,
-//     database: process.env.database,
-//   });
+//   connectionLimit: 10, // Maximum number of connections in the pool
+//   host: "localhost",
+//   user: "orientso_apwainventory",
+//   password: '1234',
+//   database: "orientso_apwainventory",
+// });
+
+
+const db = mysql.createPool({
+    connectionLimit: 10,
+    host: process.env.host,
+    user: process.env.user,
+    password: process.env.password,
+    database: process.env.database,
+  });
 
 
 // Handle connection errors
