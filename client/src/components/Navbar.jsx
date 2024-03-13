@@ -8,11 +8,9 @@ import { MdDashboard } from "react-icons/md";
 import { MdOutlineDocumentScanner } from "react-icons/md";
 import { FaListUl } from "react-icons/fa6";
 import { IoBagAdd } from "react-icons/io5";
-import { ImList2 } from "react-icons/im";
-import { BiCategory } from "react-icons/bi";
+import { BiCategory, BiSolidPurchaseTag } from "react-icons/bi";
 import { PiKeyReturnFill } from "react-icons/pi";
-
-
+import { FaProductHunt } from "react-icons/fa6";
 
 
 export const Navbar = () => {
@@ -203,7 +201,7 @@ export const Navbar = () => {
                       color: location.pathname === '/viewproducts' ? "#3498db" : "white",
                       background: location.pathname === '/viewproducts' ? "transparent" : ""
                     }}
-                    className="block p-2 text-left text-sm hover:bg-[#3498db]"><ImList2 size={25} className='mx-auto' />
+                    className="block p-2 text-left text-sm hover:bg-[#3498db]"><FaProductHunt size={25} className='mx-auto' />
                   </Link>
                 </li>
                 <li className="mb-2">
@@ -230,7 +228,7 @@ export const Navbar = () => {
                       color: location.pathname === '/viewpurchase' ? "#3498db" : "white",
                       background: location.pathname === '/viewpurchase' ? "transparent" : ""
                     }}
-                  ><ImList2 size={25} className='mx-auto' /></Link>
+                  ><BiSolidPurchaseTag size={25} className='mx-auto' /></Link>
                 </li>
 
                 <li className="mb-2">

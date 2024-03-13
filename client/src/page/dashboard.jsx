@@ -12,7 +12,6 @@ import { Line, Pie } from 'react-chartjs-2';
 import loader from "../assets/loader.gif"
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement } from 'chart.js';
 
-
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement)
 
 
