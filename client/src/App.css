@@ -66,6 +66,14 @@ input[type=number] {
 .font-bold {
     font-weight: 700 !important;
 }
+.loader {
+    position: absolute;
+    height: 80px;
+    width: 80px;
+    top: calc(50% - 40px);
+    left: calc(50% - 40px);
+  }
+  
 
 @media print {
     .p_none{
@@ -83,4 +91,17 @@ input[type=number] {
       left: 0;
       top: 0;
     }
+  }
+
+
+  .price {
+    display: inline-flex; /* Ensures both prices are displayed inline */
+  }
+  
+  .original-price {
+    text-decoration: line-through; /* Strikes through the original price */
+  }
+  
+  .discounted-price {
+    color: #EF4444; /* Apply a red color to the discounted price */
   }

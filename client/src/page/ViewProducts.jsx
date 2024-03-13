@@ -69,7 +69,7 @@ const ViewProducts = () => {
         <div className='bg-gray-100  min-h-screen'>
             <Navbar />
 
-            <div className="bg-gray-100 min-h-screen py-8 px-10 ml-[225px]">
+            <div className="bg-gray-100 min-h-screen py-8 px-10 ml-[225px] w_content">
                 <div className="container mx-auto">
                     <h1 className="text-3xl font-bold text-gray-800 mb-4">Our Products</h1>
                     {/* <p className="text-lg text-gray-600 mb-8">Browse our latest collection of products designed to enhance your lifestyle.</p> */}
@@ -77,7 +77,7 @@ const ViewProducts = () => {
                     <div className="overflow-x-auto rounded-b-xl shadow">
                         <table className="table-auto w-full border-collapse">
                             <thead>
-                                <tr className=" bg-gray-900 text-white uppercase">
+                                <tr className=" bg-[#e2e8f0] text-black">
                                     <th className="px-6 py-4">Product Name</th>
                                     <th className="px-6 py-4">Model</th>
                                     <th className="px-6 py-4">Stock</th>

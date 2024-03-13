@@ -7,7 +7,7 @@ import Invoice from '../components/Invoice';
 import { useNavigate } from 'react-router';
 import { useAuthContext } from '../Context/AuthContext';
 
-const ViewPOS = () => {
+const Returns = () => {
     const { FPOS, setFPOS } = useAuthContext();
     const [POS, setPOS] = useState([]);
     const [show, setShow] = useState(false);
@@ -21,7 +21,7 @@ const ViewPOS = () => {
 
     const fetchData = async () => {
         try {
-            const { data } = await axios.get(import.meta.env.VITE_API_URL + "/api/pos/view", {
+            const { data } = await axios.get(import.meta.env.VITE_API_URL + "/api/pos/viewreturns", {
                 headers: {
                     "Content-Type": "application/json",
                     token: Cookies.get("token"),
@@ -34,42 +34,6 @@ const ViewPOS = () => {
         }
     }
 
-    const FETCHPOS = async (date) => {
-        setSelectedD(date)
-        const { data } = await axios.get(import.meta.env.VITE_API_URL + `/api/pos/view/${date}`,
-
-            {
-                headers: {
-                    "Content-Type": "application/json",
-                    token: Cookies.get("token"),
-                },
-
-            })
-        setFPOS(data.result)
-    }
-
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const url = selectedDate ? `/api/pos/view/${selectedDate}?page=${currentPage}&limit=100` : `/api/pos/view?page=${currentPage}&limit=100`;
-                const { data } = await axios.get(import.meta.env.VITE_API_URL + url,
-                    {
-                        headers: {
-                            "Content-Type": "application/json",
-                            token: Cookies.get("token"),
-                        },
-
-                    })
-
-                setFPOS(data.result)
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        };
-
-        fetchData();
-    }, [currentPage, selectedDate]);
 
 
     useEffect(() => {
@@ -83,32 +47,17 @@ const ViewPOS = () => {
             <div className="bg-gray-100 py-8 px-10 min-h-screen ml-[225px] w_content">
                 <div className="container mx-auto">
                     <div className="flex justify-between items-center">
-                        <h1 className="text-3xl font-bold text-gray-800 mb-4">Recent Sales</h1>
-                        <div className="flex items-center">
-                            <input type="date" onChange={(e) => FETCHPOS(e.target.value)}
-                                className='px-3 py-2  me-3 rounded-sm shadow outline-none cursor-pointer'
-                                value={selectedDate} />
-                            <div>
-                                <button className='bg_primary px-3 py-2 me-2 text-white rounded'
-                                    onClick={() => {
-                                        setFPOS(POS)
-                                        setSelectedD("")
-                                    }}>Show All</button>
-
-                                <button className='bg-green-400 px-3 py-2  text-white rounded'
-                                    onClick={() => window.open(`/preview?date=${selectedDate}`, "_blank")}>Download</button>
-                            </div>
-                        </div>
+                        <h1 className="text-3xl font-bold text-gray-800 mb-4">Return Sales</h1>
+                       
                     </div>
                     <div className="overflow-x-auto rounded-b-xl shadow mt-3">
                         <table className="table-auto w-full border-collapse ">
                             <thead>
                                 <tr className=" bg-[#e2e8f0] text-black ">
+                                    <th className="px-5 py-4">Date</th>
                                     <th className="px-6 py-4 ">Customer</th>
                                     <th className="px-6 py-4">Products</th>
                                     <th className="px-6 py-4">Total</th>
-                                    <th className="px-6 py-4">Discount</th>
-                                    <th className="px-6 py-4">Action</th>
                                 </tr>
                             </thead>
 
@@ -118,16 +67,16 @@ const ViewPOS = () => {
 
                                 {FPOS?.map((elem) => {
                                     return <tr key={elem.id} className="border-b border-gray-100">
+                                        <td className="px-5 py-4 text-center">{elem.date}</td>
                                         <td className="px-6 py-4 text-center">{elem.customer}</td>
                                         <td className="px-6 py-4 text-center">{elem.products.map((elem) => `${elem.name} `)}</td>
-                                        <td className="px-6 py-4 text-center text-[#10b981]">RS {Number(elem.total).toLocaleString()}</td>
-                                        <td className="px-6 py-4 text-center text-[#4261ff]">{Number(elem.discount)} %</td>
-                                        <td className="px-6 py-4">
-                                            <div className='flex justify-center'>
-                                                <MdEdit size={30} color='blue'
+                                        <td className="px-6 py-4 text-center text-[#10b981]">RS {Number(elem.products.reduce((acc,curr ) => {return acc + curr.price*curr.quantity}, 0))}</td>
+                                        {/* <td className="px-6 py-4">
+                                            <div className='flex justify-center'> */}
+                                                {/* <MdEdit size={30} color='blue'
                                                     onClick={() => navigate(`/return/${elem.id}`)}
-                                                    cursor={"pointer"} />
-                                                <button className='bg_primary px-5 py-2 rounded text-white ms-3'
+                                                    cursor={"pointer"} /> */}
+                                                {/* <button className='bg_primary px-5 py-2 rounded text-white ms-3'
                                                     onClick={() => {
                                                         const { products, ...data } = elem;
                                                         setSelected(products)
@@ -135,9 +84,9 @@ const ViewPOS = () => {
                                                         setDiscount(elem.discount)
                                                         setTotal(elem.total)
                                                         setShow(true)
-                                                    }}>View</button>
-                                            </div>
-                                        </td>
+                                                    }}>View</button> */}
+                                            {/* </div> */}
+                                        {/* </td> */}
                                     </tr>
                                 })}
                             </tbody>
@@ -162,5 +111,5 @@ const ViewPOS = () => {
     )
 }
 
-export default ViewPOS;
+export default Returns;
 

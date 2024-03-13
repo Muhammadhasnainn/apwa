@@ -14,7 +14,7 @@ router.post("/add", verifyToken, async (req, res) => {
     req.body.products.forEach((product) => {
       const updateStockQuery =
         "UPDATE products SET stock = stock + ? WHERE id = ?";
-      db.query(updateStockQuery, [product.stock, product.id], (err) => {
+      db.query(updateStockQuery, [Number(product.quantity), product.id], (err) => {
         if (err) {
           console.log(err);
           return res.json({ message: "Error updating product stock" });
@@ -23,7 +23,7 @@ router.post("/add", verifyToken, async (req, res) => {
     });
 
     const totalcost = req.body.products.reduce(
-      (total, product) => total + product.price * product.quantity,
+      (total, product) => Number(total) + Number(product.price) * product.quantity,
       0
     );
 
@@ -51,7 +51,7 @@ router.post("/add", verifyToken, async (req, res) => {
 
 // View Purchases
 router.get("/view", verifyToken, async (req, res) => {
-  const query = "SELECT * FROM purchase";
+  const query = "SELECT * FROM purchase ORDER BY date DESC";
 
   db.query(query, [], (err, result) => {
     if (err) {
@@ -64,7 +64,7 @@ router.get("/view", verifyToken, async (req, res) => {
 
 // View PURCHASED orders
 router.get("/viewpurchased", verifyToken, async (req, res) => {
-  const query = "SELECT * FROM purchase WHERE `return` = ?";
+  const query = "SELECT * FROM purchase WHERE `return` = ? ORDER BY date DESC";
 
   db.query(query, [0], (err, result) => {
     if (err) {
@@ -78,7 +78,7 @@ router.get("/viewpurchased", verifyToken, async (req, res) => {
 
 // View RETURN purchases
 router.get("/viewreturns", verifyToken, async (req, res) => {
-  const query = "SELECT * FROM purchase where `return` = ?";
+  const query = "SELECT * FROM purchase where `return` = ? ORDER BY date DESC";
 
   db.query(query, [1], (err, result) => {
     if (err) {
@@ -107,4 +107,17 @@ router.post("/addsupplier", verifyToken, async (req, res) => {
   }
 });
 
+// View SUpplers
+router.get("/viewsup", verifyToken, async (req, res) => {
+  const query = "SELECT * FROM supplier";
+
+  db.query(query, [], (err, result) => {
+    if (err) {
+      console.log(err);
+      return res.json({ message: "Error getting records" });
+    }
+
+    res.json({ result });
+  });
+});
 module.exports = router;

@@ -57,7 +57,7 @@ export default function Add_product() {
         <Navbar />
       </div>
       {/* Add Product Form */}
-      <div className="flex-1 py-8 px-10 ml-[225px] flex justify-center items-center md:px-0">
+      <div className="flex-1 py-8 px-10 ml-[225px] w_content flex justify-center items-center md:px-0">
         <div className="bg-white rounded-lg shadow-md p-8 w-full max-w-xl">
           <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">Add Product</h2>
           <form className="space-y-4" onSubmit={handleSubmit}>

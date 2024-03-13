@@ -72,4 +72,17 @@ router.get("/view", verifyToken, async (req, res) => {
   });
 });
 
+
+router.get("/viewactive", verifyToken, async (req, res) => {
+  const query = "SELECT * FROM categories  WHERE status = 0";
+
+  db.query(query, [], (err, result) => {
+    if (err) {
+      return res.json({ message: "Error while getting categories" });
+    }
+
+    res.json({ result });
+  });
+});
+
 module.exports = router;

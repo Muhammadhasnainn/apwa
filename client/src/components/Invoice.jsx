@@ -13,13 +13,13 @@ const Invoice = (props) => {
                 <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
 
                     <div className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl p_shadow transition-all sm:my-8 sm:w-full sm:max-w-lg"
-                     id='content'>
-                        <div className="bg-slate-400 px-3 py-1">
+                        id='content'>
+                        <div className="bg-gray-100 px-3 py-1">
                             <h1 className='text-xl'>Invoice Receipt</h1>
                         </div>
                         <div style={{ maxHeight: "60vh", overflowY: "auto" }}>
                             <div className='mt-3 px-10'>
-                                <p className='text-sm my-1'>Date: 19-02-2002</p>
+                                <p className='text-sm my-1'>Date: {new Date().getDate()}-{new Date().getMonth() + 1}-{new Date().getFullYear()}</p>
                                 <p className='text-sm my-1'>Address : 2nd Floor, Progressive Plaza, Karachi</p>
                                 <p className='text-sm my-1'>Email : support@orientsoftsolutions.com</p>
                                 <p className='text-sm my-1'>Phone : 32323243434</p>
@@ -37,6 +37,10 @@ const Invoice = (props) => {
                                         </div>
                                     })}
                                     <div className='flex mt-5 justify-between items-center border-b-gray-950 border-dotted border-b-2 pb-1'>
+                                        <p className='font-bold'>Discount</p>
+                                        <p className='font-bold'>{props.discount} %</p>
+                                    </div>
+                                    <div className='flex mt-3 justify-between items-center border-b-gray-950 border-dotted border-b-2 pb-1'>
                                         <p className='font-bold'>Subtotal</p>
                                         <p className='font-bold'>$ {props.total}</p>
                                     </div>

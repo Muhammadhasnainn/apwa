@@ -31,6 +31,8 @@ export default function Add_catogery() {
       console.log(error);
     }
   }
+  
+
 
   return (
 

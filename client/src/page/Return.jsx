@@ -4,8 +4,9 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { MdDelete } from 'react-icons/md';
 import Invoice from '../components/Invoice';
+import { useParams } from 'react-router';
 
-const Pos = () => {
+const Return = () => {
     const [inputsdata, setInputsData] = useState({ discount: 10 });
     const [category, setcategory] = useState([]);
     const [products, setProducts] = useState([]);
@@ -13,22 +14,32 @@ const Pos = () => {
     const [show, setShow] = useState(false);
     const [Fproducts, setFproducts] = useState([]);
     const [total, setTotal] = useState(0)
+    const { id } = useParams();
 
 
     const handleChange = (e) => {
         setInputsData((prev) => ({ ...prev, [e.target.id]: e.target.value }))
     }
 
+
     const handleSubmit = async () => {
+        const pos = await axios.get(import.meta.env.VITE_API_URL + `/api/pos/viewpos/${id}`, {
+            headers: {
+                "Content-Type": "application/json",
+                token: Cookies.get("token"),
+            },
+        });
+
         if (Object.values(inputsdata).length === 3) {
             try {
                 const totalAmount = selected.reduce((prev, curr) => prev + curr.subtotal, 0);
 
-                const { data } = await axios.post(import.meta.env.VITE_API_URL + "/api/pos/add",
+                const { data } = await axios.put(import.meta.env.VITE_API_URL + `/api/pos/edit/${id}`,
                     {
                         ...inputsdata,
                         total: Math.round(totalAmount - (totalAmount / 100 * inputsdata.discount)),
-                        products: selected
+                        products: selected,
+                        productsInitial: pos.data.result[0]?.products
                     },
                     {
                         headers: {
@@ -39,7 +50,6 @@ const Pos = () => {
 
                 alert(data.message)
                 setShow(true)
-                // setSelected([])
             } catch (error) {
                 console.log(error);
                 alert(error?.response?.data?.message)
@@ -48,7 +58,6 @@ const Pos = () => {
             alert("FILL ALL FIELDS!")
         }
     }
-
 
     useEffect(() => {
         const FETCHDATA = async () => {
@@ -69,6 +78,18 @@ const Pos = () => {
                     token: Cookies.get("token"),
                 },
             });
+
+            const pos = await axios.get(import.meta.env.VITE_API_URL + `/api/pos/viewpos/${id}`, {
+                headers: {
+                    "Content-Type": "application/json",
+                    token: Cookies.get("token"),
+                },
+            });
+
+            if (pos?.data?.result.length > 0) {
+                setInputsData({ discount: pos.data.result[0]?.discount, customer: pos.data.result[0]?.customer, category: pos.data.result[0]?.category })
+                setSelected(pos.data.result[0]?.products)
+            }
             setProducts(products.data.result);
             setFproducts(products.data.result);
         }
@@ -117,7 +138,7 @@ const Pos = () => {
         <div className="flex flex-col min-h-screen bg-gray-100 py-8 px-10 ">
             <Navbar />
             <div className='w_content ml-[225px] '>
-                <h1 className="text-3xl font-bold mb-4">Create Sale</h1>
+                <h1 className="text-3xl font-bold mb-4">Return Sale</h1>
                 <div className=" grid grid-cols-2 gap-8 justify-between">
                     <div className="w-[100%] h-[99%] bg-white rounded-lg shadow-md overflow-hidden">
                         <div className="p-4">
@@ -131,6 +152,7 @@ const Pos = () => {
                                         className="block outline-none w-full border-gray-300 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2"
                                         placeholder="Select a client"
                                         onChange={handleChange}
+                                        value={inputsdata.customer}
                                     />
                                 </div>
                                 <label htmlFor="category" className="block text-sm text-left font-medium text-gray-700 mt-4">Select a Category</label>
@@ -141,6 +163,7 @@ const Pos = () => {
                                         onChange={handleChange}
                                         className="block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2"
                                         defaultValue="" // Set default value if needed
+                                        value={inputsdata.category}
                                     >
                                         <option value="" disabled>Select a category</option>
                                         {category?.map((elem) => {
@@ -293,4 +316,4 @@ const Pos = () => {
     );
 };
 
-export default Pos;
+export default Return;

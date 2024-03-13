@@ -66,7 +66,7 @@ const ViewCategories = () => {
         <div className='bg-gray-100  min-h-screen'>
             <Navbar />
 
-            <div className="bg-gray-100 py-8 px-10 ml-[225px] min-h-screen">
+            <div className="bg-gray-100 py-8 px-10 ml-[225px] min-h-screen w_content">
                 <div className="container mx-auto">
                     <div className="flex justify-between mb-2 items-center">
                         <h1 className="text-3xl font-bold text-gray-800 mb-4">Categories</h1>
@@ -76,7 +76,7 @@ const ViewCategories = () => {
                     <div className="overflow-x-auto rounded-b-xl shadow">
                         <table className="table-auto w-full border-collapse">
                             <thead>
-                                <tr className=" bg-gray-900 text-white uppercase">
+                                <tr className=" bg-[#e2e8f0] text-black">
                                     <th className="px-6 py-4">Name</th>
                                     <th className="px-6 py-4">Status</th>
                                     <th className="px-6 py-4">Action</th>
@@ -89,10 +89,10 @@ const ViewCategories = () => {
                                         <td className="px-6 py-4 text-center">{elem.status === 0 ? "ACTIVE" : "NON ACTIVE"}</td>
                                         <td className="px-6 py-4 text-center flex justify-center">
                                             {elem.status === 1 ?
-                                                <button className='px-3 py-1 bg-blue-700 me-3 text-white'
+                                                <button className='px-3 py-1 bg-blue-700 me-3 text-white w-[150px]'
                                                     onClick={() => changeStatus(elem, "active")}>Mark Active</button>
                                                 :
-                                                <button className='px-3 py-1 bg-blue-700 me-3 text-white'
+                                                <button className='px-3 py-1 bg-blue-700 me-3 text-white w-[150px]'
                                                     onClick={() => changeStatus(elem, "not")}>Mark Not Active</button>
                                             }
                                             <button className='px-3 py-1 bg-red-700 text-white'
