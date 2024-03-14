@@ -67,7 +67,7 @@ const Returns = () => {
 
                                 {FPOS?.map((elem) => {
                                     return <tr key={elem.id} className="border-b border-gray-100">
-                                        <td className="px-5 py-4 text-center">{elem.date}</td>
+                                        <td className="px-5 py-4 text-center">{elem?.date?.split("T")[0]}</td>
                                         <td className="px-6 py-4 text-center">{elem.customer}</td>
                                         <td className="px-6 py-4 text-center">{elem.products.map((elem) => `${elem.name} `)}</td>
                                         <td className="px-6 py-4 text-center text-[#10b981]">RS {Number(elem.products.reduce((acc,curr ) => {return acc + curr.price*curr.quantity}, 0))}</td>

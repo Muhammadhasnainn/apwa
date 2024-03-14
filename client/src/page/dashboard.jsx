@@ -221,7 +221,7 @@ function Dashboard() {
                     </div>
                 </div>
 
-                <div className="flex justify-between mt-7 p-4">
+                <div className="flex justify-between mt-3 p-4">
                     <div className='w-1/3 bg-white shadow-xl px-3 py-3 rounded'>
                         <h1 className='fw-bold mb-3 border-b pb-1'>Top Selling Products:</h1>
                         <Pie data={data2} />
