@@ -3,8 +3,10 @@ import axios from 'axios';
 import { Navbar } from '../components/Navbar';
 import React, { useState } from 'react';
 import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router';
 
 export default function Add_catogery() {
+  const navigate = useNavigate();
   const [inputsdata, setInputsData] = useState({});
 
   const handleChange = (e) => {
@@ -27,6 +29,7 @@ export default function Add_catogery() {
         })
       alert(data.message)
       setInputsData({name: "", status: ""})
+      navigate("/viewcategories")
     } catch (error) {
       console.log(error);
     }
@@ -58,7 +61,7 @@ export default function Add_catogery() {
                   onChange={handleChange}
                   value={inputsdata.status}
                 >
-                  <option value="" disabled>Select a category</option>
+                  <option value="" disabled>Select a status</option>
                   <option value="0">Active</option>
                   <option value="1">InActive</option>
                 </select>
@@ -68,7 +71,7 @@ export default function Add_catogery() {
 
             </div>
             <div className="text-center">
-              <button type="submit" className="bg-indigo-600 text-white py-2 px-6 rounded-md hover:bg-indigo-700 transition duration-300">Add Product</button>
+              <button type="submit" className="bg-indigo-600 text-white py-2 px-6 rounded-md hover:bg-indigo-700 transition duration-300">Add Category</button>
             </div>
           </form>
         </div>

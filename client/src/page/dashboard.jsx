@@ -204,29 +204,23 @@ function Dashboard() {
                                     <p className=" text-2xl">RS {Number(Mpurchase).toLocaleString()} </p>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div className="bg-white rounded-lg p-4 shadow-lg ml-3" style={{ flex: 1, maxHeight: '12rem' }}>
-                        <h2 className="text-lg text-left font-semibold mb-4">Returns</h2>
-                        <div className="flex justify-between px-3">
-                            <div className="text-center flex flex-col items-center justify-between">
-                                <MdPointOfSale size={45} color='#3498db' />
+                            <div className="text-center flex-1 flex flex-col items-center justify-between">
+                                <MdPointOfSale size={50} color='#3498db' />
                                 <div>
-
-                                    <p className="text-base mb-1">POS returns</p>
-                                    <p className="text-2xl text-black">RS {salesR}</p>
+                                    <p className="text-base mb-1">Returns</p>
+                                    <p className=" text-2xl">RS {Number(salesR).toLocaleString()} </p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div className="flex justify-between mt-3 p-4">
-                    <div className='w-1/3 bg-white shadow-xl px-3 py-3 rounded'>
+                <div className="grid grid-cols-3 justify-between mt-3 p-4 gap-7">
+                    <div className='bg-white shadow-xl px-3 py-3 rounded'>
                         <h1 className='fw-bold mb-3 border-b pb-1'>Top Selling Products:</h1>
                         <Pie data={data2} />
                     </div>
-                    <div className='w-7/12 bg-white shadow-xl p-3 rounded'>
+                    <div className='bg-white shadow-xl p-3 rounded col-span-2'>
                         <h1 className='fw-bold mb-3 border-b pb-1'>Monthly Sales:</h1>
                         <div className="mt-2">
                             <Line data={data}

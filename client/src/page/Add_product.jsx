@@ -9,6 +9,14 @@ export default function Add_product() {
 
 
   const handleChange = (e) => {
+    if (e.target.id === "price" && parseFloat(e.target.value) < 0) {
+      return;
+    }
+
+    if (e.target.id === "stock" && parseFloat(e.target.value) < 0) {
+      return;
+    }
+
     setInputsData((prev) => ({ ...prev, [e.target.id]: e.target.value }))
   }
 
@@ -30,7 +38,6 @@ export default function Add_product() {
     e.target.reset()
   }
 
-  // console.log(inputsdata);
   useEffect(() => {
     const FETCHDATA = async () => {
       const { data } = await axios.get(import.meta.env.VITE_API_URL + "/api/category/view",
@@ -42,7 +49,6 @@ export default function Add_product() {
           },
 
         })
-      console.log(data);
       setcategory(data.result)
 
     }
@@ -65,12 +71,12 @@ export default function Add_product() {
               <div className="w-full md:w-1/2 px-2 md:px-4 mb-4">
                 <label htmlFor="itemName" className="block text-sm font-medium text-gray-700 mb-1">Item Name</label>
                 <input id="name" type="text" name="itemName"
-                  value={inputsdata.name} className="w-full py-2 px-3 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-500" placeholder="Enter item name" onChange={handleChange} required/>
+                  value={inputsdata.name} className="w-full py-2 px-3 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-500" placeholder="Enter item name" onChange={handleChange} required />
               </div>
               <div className="w-full md:w-1/2 px-2 md:px-4 mb-4">
                 <label htmlFor="itemModel" className="block text-sm font-medium text-gray-700 mb-1">Item Model</label>
                 <input id="model" type="text" name="itemModel"
-                  value={inputsdata.model} className="w-full py-2 px-3 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-500" placeholder="Enter item model" onChange={handleChange} required/>
+                  value={inputsdata.model} className="w-full py-2 px-3 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-500" placeholder="Enter item model" onChange={handleChange} required />
               </div>
               <div className="w-full md:w-1/2 px-2 md:px-4 mb-4">
                 <label htmlFor="itemCode" className="block text-sm font-medium text-gray-700 mb-1">Item Code</label>
@@ -89,14 +95,14 @@ export default function Add_product() {
                   onChange={handleChange}>
                   <option value="" disabled>Select a category</option>
                   {category?.map((elem) => {
-                    return <option value={elem.name}>{elem.name}</option>
+                    return <option value={elem.id}>{elem.name}</option>
                   })}
                 </select>
               </div>
               <div className="w-full px-2 md:px-4 mb-4">
                 <label htmlFor="stock" className="block text-sm font-medium text-gray-700 mb-1">Stock</label>
                 <input id="stock" type="number" name="stock" className="w-full py-2 px-3 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-500" placeholder="Enter stock"
-                  onChange={handleChange} value={inputsdata.stock} required/>
+                  onChange={handleChange} value={inputsdata.stock} required />
               </div>
             </div>
             <div className="text-center">

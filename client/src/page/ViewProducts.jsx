@@ -22,10 +22,11 @@ const ViewProducts = () => {
         }
     }
 
+
     const DeleteProduct = async (id) => {
         const confirmm = window.confirm("Are You Sure?");
         if (confirmm) {
-            axios.post(import.meta.env.VITE_API_URL + `/api/products/delete/${selected}`,
+            axios.post(import.meta.env.VITE_API_URL + `/api/products/delete/${id}`,
                 {},
                 {
                     headers: {
@@ -52,9 +53,9 @@ const ViewProducts = () => {
                     },
                 })
             alert("Updated")
+            fetchData()
             setShow(false)
             setSelected({})
-            fetchData()
         } catch (error) {
             console.log(error);
         }
@@ -148,6 +149,19 @@ const ViewProducts = () => {
                             placeholder="Product Price"
                             value={selected.price}
                             onChange={(e) => setSelected({ ...selected, price: e.target.value })}
+                        />
+                    </div>
+
+                    <div className='mt-2'>
+                        <label>Stock: </label>
+                        <input
+                            type="number"
+                            name="stock"
+                            id="stock"
+                            className="block w-full outline-none mt-1 border-gray-300 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2"
+                            placeholder="Stock"
+                            value={selected.stock}
+                            onChange={(e) => setSelected({ ...selected, stock: e.target.value })}
                         />
                     </div>
                     <div className="flex justify-end">

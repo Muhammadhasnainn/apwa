@@ -28,12 +28,12 @@ Font.register({
 });
 
 const Preview = () => {
-    const { FPOS, setFPOS } = useAuthContext();
+    const { FPOS, setFPOS, selectedDate, selectedDate2 } = useAuthContext();
     const queryParams = new URLSearchParams(location.search);
     const [grand, setGrand] = useState("");
 
     const FETCHPOS = async () => {
-        let url = queryParams.get("date") ? `/api/pos/view/${queryParams.get("date")}` : `/api/pos/view`;
+        let url = queryParams.get("date").length > 0 ? `/api/pos/view/${queryParams.get("date")}/${queryParams.get("to")}` : `/api/pos/view`;
         const { data } = await axios.get(import.meta.env.VITE_API_URL + url, {
             headers: {
                 "Content-Type": "application/json",
@@ -41,7 +41,11 @@ const Preview = () => {
             },
         });
         setFPOS(data.result);
-        setGrand(data.result.reduce((acc, curr) => Number(acc) + (curr.total), 0));
+        if (queryParams.get("discount")) {
+            setGrand(data.result.reduce((acc, curr) => Number(acc) + (curr.grandtotal), 0));
+        } else {
+            setGrand(data.result.reduce((acc, curr) => Number(acc) + (curr.total), 0));
+        }
     };
 
     useEffect(() => {
@@ -61,8 +65,10 @@ const Preview = () => {
                         fontFamily: "poppins",
                         height: "100%"
                     }}>
+                        {queryParams.get("date").length > 0 && <> <Text style={{ fontSize: 12, fontFamily: "flight" }}>From: {queryParams.get("date")}</Text>
+                            <Text style={{ fontSize: 12, fontFamily: "flight" }}>To: {queryParams.get("to")}</Text>
+                        </>}
                         {i === 0 && <> <Text style={{ fontSize: 20, textAlign: "center" }}>APWA SALES REPORT</Text>
-                            {queryParams.get("date") && <Text style={{ fontSize: 10, fontFamily: "flight" }}>Date: {queryParams.get("date")}</Text>}
                         </>}
                         <View style={{
                             marginTop: 20,
@@ -101,7 +107,7 @@ const Preview = () => {
                                         color: "black",
                                         paddingVertical: 5,
                                         width: "15%"
-                                    }}>RS {Number(elem.total).toLocaleString()}</Text>
+                                    }}>RS {queryParams.get("discount") ? Number(elem.grandtotal).toLocaleString() : Number(elem.total).toLocaleString()}</Text>
                                 </View>
                             })}
                         </View>

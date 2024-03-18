@@ -31,6 +31,6 @@ app.use("/api/stats", statsRoute);
 app.use("/api/uploadImg", uploadImgRoute);
 
 app.disable("x-powered-by");
-app.listen(8800, () => {
+app.listen(8000, () => {
   console.log("Connected to Backend!");
 });

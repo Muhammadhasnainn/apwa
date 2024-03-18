@@ -37,7 +37,7 @@ const Return = () => {
                 const { data } = await axios.put(import.meta.env.VITE_API_URL + `/api/pos/edit/${id}`,
                     {
                         ...inputsdata,
-                        total: Math.round(totalAmount - (totalAmount / 100 * inputsdata.discount)),
+                        total: (Math.round((totalAmount - (totalAmount / 100 * inputsdata.discount)) / 10) * 10).toLocaleString(),
                         products: selected,
                         productsInitial: pos.data.result[0]?.products
                     },
@@ -86,8 +86,9 @@ const Return = () => {
                 },
             });
 
+            console.log(pos?.data?.result);
             if (pos?.data?.result.length > 0) {
-                setInputsData({ discount: pos.data.result[0]?.discount, customer: pos.data.result[0]?.customer, category: pos.data.result[0]?.category })
+                setInputsData({ discount: pos.data.result[0]?.discount, customer: pos.data.result[0]?.customer, category: pos.data.result[0]?.category_id })
                 setSelected(pos.data.result[0]?.products)
             }
             setProducts(products.data.result);
@@ -295,7 +296,7 @@ const Return = () => {
                     <div className="p-2">
                         <div className="text-center text-2xl w-50 h-17 font-bold bg-blue-950 bg-opacity-20 p-4">
                             Net Total: RS   <span className="original-price text-red-700">{total.toLocaleString()}</span>
-                            <span className="discounted-price text-blue-500 font-bold"> {Math.round(total - (total / 100 * inputsdata.discount)).toLocaleString()}</span>
+                            <span className="discounted-price text-blue-500 font-bold"> {(Math.round((total - (total / 100 * inputsdata.discount)) / 10) * 10).toLocaleString()}</span>
                         </div>
                     </div>
                 </div>
@@ -309,7 +310,8 @@ const Return = () => {
                 {show && <Invoice close={() => setShow(false)} inputsdata={inputsdata}
                     products={selected}
                     discount={inputsdata.discount}
-                    total={Math.round(total - (total / 100 * inputsdata.discount))}
+                    total={(Math.round((total - (total / 100 * inputsdata.discount)) / 10) * 10).toLocaleString()}
+                    id={id}
                 />}
             </div>
         </div>

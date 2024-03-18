@@ -3,7 +3,6 @@ import { Navbar } from '../components/Navbar'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import { MdEdit, MdDelete } from "react-icons/md";
-import Invoice from '../components/Invoice';
 import { useNavigate } from 'react-router';
 import { useAuthContext } from '../Context/AuthContext';
 
@@ -15,7 +14,6 @@ const Returns = () => {
     const [selected, setSelected] = useState([]);
     const [discount, setDiscount] = useState("");
     const [currentPage, setcurrentPage] = useState(1);
-    const [selectedDate, setSelectedD] = useState("")
     const [total, setTotal] = useState(0)
     const navigate = useNavigate();
 
@@ -34,7 +32,12 @@ const Returns = () => {
         }
     }
 
-
+    const returnPOS = () => {
+        const prompt = window.prompt("Enter POS ID:")
+        if(prompt){
+            navigate(`/return/${prompt}?redirect=true`)
+        }
+    }
 
     useEffect(() => {
         fetchData();
@@ -43,12 +46,12 @@ const Returns = () => {
     return (
         <div className='bg-gray-100   min-h-screen'>
             <Navbar />
-
             <div className="bg-gray-100 py-8 px-10 min-h-screen ml-[225px] w_content">
                 <div className="container mx-auto">
                     <div className="flex justify-between items-center">
                         <h1 className="text-3xl font-bold text-gray-800 mb-4">Return Sales</h1>
-                       
+                        <button className='bg-blue-700 text-white rounded px-3 py-2'
+                        onClick={returnPOS}>Create Return</button>
                     </div>
                     <div className="overflow-x-auto rounded-b-xl shadow mt-3">
                         <table className="table-auto w-full border-collapse ">
@@ -63,20 +66,18 @@ const Returns = () => {
 
 
                             <tbody className='bg-white'>
-
-
                                 {FPOS?.map((elem) => {
                                     return <tr key={elem.id} className="border-b border-gray-100">
                                         <td className="px-5 py-4 text-center">{elem?.date?.split("T")[0]}</td>
                                         <td className="px-6 py-4 text-center">{elem.customer}</td>
                                         <td className="px-6 py-4 text-center">{elem.products.map((elem) => `${elem.name} `)}</td>
-                                        <td className="px-6 py-4 text-center text-[#10b981]">RS {Number(elem.products.reduce((acc,curr ) => {return acc + curr.price*curr.quantity}, 0))}</td>
+                                        <td className="px-6 py-4 text-center text-[#10b981]">RS {Number(elem.products.reduce((acc, curr) => { return acc + curr.price * curr.quantity }, 0))}</td>
                                         {/* <td className="px-6 py-4">
                                             <div className='flex justify-center'> */}
-                                                {/* <MdEdit size={30} color='blue'
+                                        {/* <MdEdit size={30} color='blue'
                                                     onClick={() => navigate(`/return/${elem.id}`)}
                                                     cursor={"pointer"} /> */}
-                                                {/* <button className='bg_primary px-5 py-2 rounded text-white ms-3'
+                                        {/* <button className='bg_primary px-5 py-2 rounded text-white ms-3'
                                                     onClick={() => {
                                                         const { products, ...data } = elem;
                                                         setSelected(products)
@@ -85,7 +86,7 @@ const Returns = () => {
                                                         setTotal(elem.total)
                                                         setShow(true)
                                                     }}>View</button> */}
-                                            {/* </div> */}
+                                        {/* </div> */}
                                         {/* </td> */}
                                     </tr>
                                 })}
@@ -99,14 +100,7 @@ const Returns = () => {
                         {FPOS.length === 100 && <button className='bg_primary px-4 py-2 rounded text-white'>Next</button>
                         }</div>
                 </div>
-                {show && <Invoice close={() => setShow(false)} inputsdata={inputsdata}
-                    products={selected}
-                    total={total}
-                    discount={discount}
-                />}
             </div>
-
-
         </div>
     )
 }

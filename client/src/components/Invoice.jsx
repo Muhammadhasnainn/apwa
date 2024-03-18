@@ -19,6 +19,7 @@ const Invoice = (props) => {
                         </div>
                         <div style={{ maxHeight: "60vh", overflowY: "auto" }}>
                             <div className='mt-3 px-10'>
+                                <p className='text-sm my-1'>Receipt Id: #{props.id}</p>
                                 <p className='text-sm my-1'>Date: {new Date().getDate()}-{new Date().getMonth() + 1}-{new Date().getFullYear()}</p>
                                 <p className='text-sm my-1'>Address : 2nd Floor, Progressive Plaza, Karachi</p>
                                 <p className='text-sm my-1'>Email : support@orientsoftsolutions.com</p>

@@ -58,6 +58,23 @@ const ViewCategories = () => {
         }
     }
 
+    const EditCategory = async (elem) => {
+        const prompt = window.prompt("Change Category Name:");
+        if (prompt) {
+            axios.put(import.meta.env.VITE_API_URL + `/api/category/edit/${elem.id}`,
+                { name: prompt, status: elem.status },
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        token: Cookies.get("token"),
+                    },
+                })
+            alert("Name changed!")
+            fetchData()
+        }
+    }
+
+
     useEffect(() => {
         fetchData();
     }, [])
@@ -95,6 +112,11 @@ const ViewCategories = () => {
                                                 <button className='px-3 py-1 bg-blue-700 me-3 text-white w-[150px]'
                                                     onClick={() => changeStatus(elem, "not")}>Mark Not Active</button>
                                             }
+                                            <MdEdit size={30} color='blue' className='me-3'
+                                                cursor={"pointer"}
+                                                onClick={() => {
+                                                    EditCategory(elem)
+                                                }} />
                                             <button className='px-3 py-1 bg-red-700 text-white'
                                                 onClick={() => DeleteCategory(elem.id)}>Delete</button>
                                         </td>

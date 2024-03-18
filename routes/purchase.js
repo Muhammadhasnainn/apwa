@@ -49,6 +49,27 @@ router.post("/add", verifyToken, async (req, res) => {
   }
 });
 
+
+router.put("/edit/:id", verifyToken, async (req, res) => {
+  try {
+    const categoryId = req.params.id;
+    const { status } = req.body;
+    const editQuery = "UPDATE purchase SET status = ? WHERE id = ?";
+
+    db.query(editQuery, [status, categoryId], (err, result) => {
+      if (err || result.affectedRows === 0) {
+        console.log(err);
+        return res.json({ message: "Error changing status" });
+      }
+
+      res.json({ message: "Status edited successfully" });
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+
 // View Purchases
 router.get("/view", verifyToken, async (req, res) => {
   const query = "SELECT * FROM purchase ORDER BY date DESC";
@@ -92,16 +113,16 @@ router.get("/viewreturns", verifyToken, async (req, res) => {
 router.post("/addsupplier", verifyToken, async (req, res) => {
   try {
 
-        const insertQuery = "INSERT INTO supplier (`name`) VALUES (?)";
+    const insertQuery = "INSERT INTO supplier (`name`) VALUES (?)";
 
-        db.query(insertQuery, [req.body.name], (err, result) => {
-          if (err) {
-            console.log(err);
-            return res.json({ message: "Error adding new Supplier " });
-          }
+    db.query(insertQuery, [req.body.name], (err, result) => {
+      if (err) {
+        console.log(err);
+        return res.json({ message: "Error adding new Supplier " });
+      }
 
-          res.json({ id: result.insertId, message: "Added successfully" });
-        });
+      res.json({ id: result.insertId, message: "Added successfully" });
+    });
   } catch (error) {
     console.log(error);
   }

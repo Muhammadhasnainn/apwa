@@ -9,7 +9,7 @@ const router = express.Router();
 router.post("/add", verifyToken, async (req, res) => {
   try {
     const insertQuery =
-      "INSERT INTO products (`name`, `itemcode`, `model`, `price`, `stock`, `category`) VALUES (?, ? , ?, ?, ?, ?)";
+      "INSERT INTO products (`name`, `itemcode`, `model`, `price`, `stock`, `category_id`) VALUES (?, ? , ?, ?, ?, ?)";
 
     db.query(
       insertQuery,
@@ -23,6 +23,7 @@ router.post("/add", verifyToken, async (req, res) => {
       ],
       (err, result) => {
         if (err) {
+          console.log(err);
           return res.json({ message: "Error adding new product" });
         }
 
@@ -38,15 +39,16 @@ router.post("/add", verifyToken, async (req, res) => {
 router.put("/edit/:id", verifyToken, async (req, res) => {
   try {
     const productId = req.params.id;
-    const { name, itemcode, model, price, stock, category } = req.body;
+    const { name, itemcode, model, price, stock, category_id } = req.body;
     const editQuery =
-      "UPDATE products SET name = ?, itemcode = ?, model = ?, price = ?, stock = ?, category = ? WHERE id = ?";
+      "UPDATE products SET name = ?, itemcode = ?, model = ?, price = ?, stock = ?, category_id = ? WHERE id = ?";
 
     db.query(
       editQuery,
-      [name, itemcode, model, price, stock, category, productId],
+      [name, itemcode, model, price, stock, category_id, productId],
       (err, result) => {
         if (err || result.affectedRows === 0) {
+          console.log(err);
           return res.json({ message: "Error editing product" });
         }
 
@@ -78,7 +80,7 @@ router.post("/delete/:id", verifyToken, async (req, res) => {
 
 // View Products
 router.get("/view", verifyToken, async (req, res) => {
-  const query = "SELECT * FROM products";
+  const query = "SELECT p.*, c.name AS category_name FROM products p JOIN categories c ON p.category_id = c.id";
 
   db.query(query, [], (err, result) => {
     if (err) {
@@ -88,5 +90,6 @@ router.get("/view", verifyToken, async (req, res) => {
     res.json({ result });
   });
 });
+
 
 module.exports = router;

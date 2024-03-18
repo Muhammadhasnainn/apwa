@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Navbar } from '../components/Navbar';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { MdDelete } from 'react-icons/md';
+import { MdClose, MdDelete } from 'react-icons/md';
 import Invoice from '../components/Invoice';
 
 const Pos = () => {
@@ -11,11 +11,49 @@ const Pos = () => {
     const [products, setProducts] = useState([]);
     const [selected, setSelected] = useState([]);
     const [show, setShow] = useState(false);
+    const [show2, setShow2] = useState("")
     const [Fproducts, setFproducts] = useState([]);
+    const [id, setID] = useState("");
     const [total, setTotal] = useState(0)
+    const [inputsdata2, setInputsData2] = useState({});
+
+    const handleChange2 = (e) => {
+        if (e.target.id === "price" && parseFloat(e.target.value) < 0) {
+            return;
+        }
+
+        if (e.target.id === "stock" && parseFloat(e.target.value) < 0) {
+            return;
+        }
+
+        setInputsData2((prev) => ({ ...prev, [e.target.id]: e.target.value }))
+    }
+
+    const handleSubmit2 = async (e) => {
+        e.preventDefault();
+        const { data } = await axios.post(import.meta.env.VITE_API_URL + "/api/products/add",
+            {
+                ...inputsdata2
+            },
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                    token: Cookies.get("token"),
+                },
+            })
+
+        alert(data.message)
+        setInputsData2({})
+        setShow2(false)
+        FetchProducts()
+        e.target.reset()
+    }
 
 
     const handleChange = (e) => {
+        if (e.target.id === "discount" && parseFloat(e.target.value) < 0) {
+            return;
+        }
         setInputsData((prev) => ({ ...prev, [e.target.id]: e.target.value }))
     }
 
@@ -27,8 +65,9 @@ const Pos = () => {
                 const { data } = await axios.post(import.meta.env.VITE_API_URL + "/api/pos/add",
                     {
                         ...inputsdata,
-                        total: Math.round(totalAmount - (totalAmount / 100 * inputsdata.discount)),
-                        products: selected
+                        total: (Math.round((totalAmount - (totalAmount / 100 * inputsdata.discount)) / 10) * 10),
+                        products: selected,
+                        grandtotal: totalAmount
                     },
                     {
                         headers: {
@@ -38,6 +77,7 @@ const Pos = () => {
                     })
 
                 alert(data.message)
+                setID(data.id)
                 setShow(true)
                 // setSelected([])
             } catch (error) {
@@ -48,7 +88,6 @@ const Pos = () => {
             alert("FILL ALL FIELDS!")
         }
     }
-
 
     useEffect(() => {
         const FETCHDATA = async () => {
@@ -75,6 +114,16 @@ const Pos = () => {
         FETCHDATA()
     }, [])
 
+    const FetchProducts = async () => {
+        const products = await axios.get(import.meta.env.VITE_API_URL + "/api/products/view", {
+            headers: {
+                "Content-Type": "application/json",
+                token: Cookies.get("token"),
+            },
+        });
+        setProducts(products.data.result);
+        setFproducts(products.data.result);
+    }
 
     const handleQuantityChange = (id, change, price) => {
         const index = selected.findIndex(item => item.idd === id);
@@ -144,7 +193,7 @@ const Pos = () => {
                                     >
                                         <option value="" disabled>Select a category</option>
                                         {category?.map((elem) => {
-                                            return <option value={elem.name}>{elem.name}</option>
+                                            return <option value={elem.id}>{elem.name}</option>
                                         })}
                                     </select>
                                 </div>
@@ -197,8 +246,8 @@ const Pos = () => {
                     <div className="bg-white w-[100%] h-[99%] rounded-lg shadow-md overflow-hidden">
                         <div className="p-4">
                             <div className="col-md-12 form-group">
-                                <div className="d-flex w-100">
-                                    <div className="search-area border flex items-center flex-grow-1">
+                                <div className="flex w-full">
+                                    <div className="search-area border flex items-center w-full flex-grow-1">
                                         <div className="search-btn d-inline-block px-2">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" className="h-6 w-6">
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -224,6 +273,8 @@ const Pos = () => {
                                             <i className="fas fa-times"></i>
                                         </label>
                                     </div>
+                                    <button className='bg_primary px-3 py-1 ms-3 text-2xl text-white'
+                                        onClick={() => setShow2(true)}>+</button>
                                 </div>
                             </div>
                         </div>
@@ -272,7 +323,7 @@ const Pos = () => {
                     <div className="p-2">
                         <div className="text-center text-2xl w-50 h-17 font-bold bg-blue-950 bg-opacity-20 p-4">
                             Net Total: RS   <span className="original-price text-red-700">{total.toLocaleString()}</span>
-                            <span className="discounted-price text-blue-500 font-bold"> {Math.round(total - (total / 100 * inputsdata.discount)).toLocaleString()}</span>
+                            <span className="discounted-price text-blue-500 font-bold">{(Math.round((total - (total / 100 * inputsdata.discount)) / 10) * 10).toLocaleString()}</span>
                         </div>
                     </div>
                 </div>
@@ -286,9 +337,68 @@ const Pos = () => {
                 {show && <Invoice close={() => setShow(false)} inputsdata={inputsdata}
                     products={selected}
                     discount={inputsdata.discount}
-                    total={Math.round(total - (total / 100 * inputsdata.discount))}
+                    total={(Math.round((total - (total / 100 * inputsdata.discount)) / 10) * 10)}
+                    id={id}
                 />}
             </div>
+
+            {show2 && <div className="h-full w-full bg-gray-300  fixed top-0 left-0 flex justify-center">
+                <div className="w-full flex flex-col">
+                    {/* Navbar */}
+                    {/* Add Product Form */}
+                    <div className="flex-1 py-8 px-10 flex justify-center items-center md:px-0">
+                        <div className="bg-white rounded-lg shadow-md p-8 w-full max-w-xl">
+                            <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">Add Product</h2>
+                            <form className="space-y-4" onSubmit={handleSubmit2}>
+                                <div className="flex flex-wrap -mx-2 md:-mx-4">
+                                    <MdClose className='absolute top-5 right-10' size={30}
+                                        cursor={"pointer"} onClick={() => setShow2(false)} />
+                                    <div className="w-full md:w-1/2 px-2 md:px-4 mb-4">
+                                        <label htmlFor="itemName" className="block text-sm font-medium text-gray-700 mb-1">Item Name</label>
+                                        <input id="name" type="text" name="itemName"
+                                            value={inputsdata2.name} className="w-full py-2 px-3 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-500" placeholder="Enter item name" onChange={handleChange2} required />
+                                    </div>
+                                    <div className="w-full md:w-1/2 px-2 md:px-4 mb-4">
+                                        <label htmlFor="itemModel" className="block text-sm font-medium text-gray-700 mb-1">Item Model</label>
+                                        <input id="model" type="text" name="itemModel"
+                                            value={inputsdata2.model} className="w-full py-2 px-3 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-500" placeholder="Enter item model" onChange={handleChange2} required />
+                                    </div>
+                                    <div className="w-full md:w-1/2 px-2 md:px-4 mb-4">
+                                        <label htmlFor="itemCode" className="block text-sm font-medium text-gray-700 mb-1">Item Code</label>
+                                        <input id="itemcode" type="text" name="itemCode"
+                                            className="w-full py-2 px-3 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-500" placeholder="Enter item code" onChange={handleChange2} required
+                                            value={inputsdata2.itemcode} />
+                                    </div>
+                                    <div className="w-full md:w-1/2 px-2 md:px-4 mb-4">
+                                        <label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-1">Price</label>
+                                        <input id="price" type="number" name="price" className="w-full py-2 px-3 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-500" placeholder="Enter price" required
+                                            onChange={handleChange2} value={inputsdata2.price} />
+                                    </div>
+                                    <div className="w-full px-2 md:px-4 mb-4">
+                                        <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                                        <select name="category" id="category" className="w-full py-2 px-3 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-500" defaultValue="" required
+                                            onChange={handleChange2}>
+                                            <option value="" disabled>Select a category</option>
+                                            {category?.map((elem) => {
+                                                return <option value={elem.id}>{elem.name}</option>
+                                            })}
+                                        </select>
+                                    </div>
+                                    <div className="w-full px-2 md:px-4 mb-4">
+                                        <label htmlFor="stock" className="block text-sm font-medium text-gray-700 mb-1">Stock</label>
+                                        <input id="stock" type="number" name="stock" className="w-full py-2 px-3 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-500" placeholder="Enter stock"
+                                            onChange={handleChange2} value={inputsdata2.stock} required />
+                                    </div>
+                                </div>
+                                <div className="text-center">
+                                    <button type="submit" className="bg_primary  text-white py-2 px-6 rounded-md hover:bg-indigo-700 transition duration-300">Add Product</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            }
         </div>
     );
 };
