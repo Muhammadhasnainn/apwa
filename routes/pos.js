@@ -49,10 +49,12 @@ router.post("/add", verifyToken, async (req, res) => {
   }
 });
 
+
+
 router.put("/edit/:id", verifyToken, async (req, res) => {
   try {
     const insertQuery =
-      "UPDATE pos SET category_id = ?, products = ?, customer = ?, total = ?, discount = ?, date = ? WHERE id = ?";
+      "UPDATE pos SET category_id = ?, products = ?, customer = ?, total = ?, discount = ?, date = ? , grandtotal = ? WHERE id = ?";
 
     const productsInitial = req.body.productsInitial || [];
 
@@ -146,6 +148,7 @@ router.put("/edit/:id", verifyToken, async (req, res) => {
         req.body.total,
         req.body.discount,
         new Date(),
+        req.body.grandtotal,
         req.params.id,
       ],
       (err, result) => {

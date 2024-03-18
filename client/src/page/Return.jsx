@@ -37,9 +37,10 @@ const Return = () => {
                 const { data } = await axios.put(import.meta.env.VITE_API_URL + `/api/pos/edit/${id}`,
                     {
                         ...inputsdata,
-                        total: (Math.round((totalAmount - (totalAmount / 100 * inputsdata.discount)) / 10) * 10).toLocaleString(),
+                        total: (Math.round((totalAmount - (totalAmount / 100 * inputsdata.discount)) / 10) * 10),
                         products: selected,
-                        productsInitial: pos.data.result[0]?.products
+                        productsInitial: pos.data.result[0]?.products,
+                        grandtotal: Math.round(totalAmount)
                     },
                     {
                         headers: {
