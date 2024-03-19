@@ -5,28 +5,43 @@ const { verifyToken } = require("../middlewares/verify");
 
 const router = express.Router();
 
-// ADD POS
+// Add pos
 router.post("/add", verifyToken, async (req, res) => {
   try {
     const insertQuery =
       "INSERT INTO pos (`category_id`,  `products` , `customer`, `total`, `discount`, `date`, `grandtotal`) VALUES (?, ?, ?, ?,  ?, ?, ?)";
 
-    req.body.products.forEach((product) => {
-      const updateStockQuery =
-        "UPDATE products SET stock = stock - ? WHERE id = ?";
-      db.query(updateStockQuery, [product.quantity, product.id], (err) => {
-        if (err) {
-          console.log(err);
-          return res
-            .status(500)
-            .json({ message: "Error updating product stock" });
-        }
-      });
-    });
+    let insufficientStock = false;
 
-    db.query(
-      insertQuery,
-      [
+    for (const product of req.body.products) {
+      const [rows, fields] = await db
+        .promise()
+        .query("SELECT stock FROM products WHERE id = ?", [product.id]);
+      const availableStock = rows[0].stock;
+      if (availableStock < product.quantity) {
+        insufficientStock = true;
+        return res.status(400).json({
+          message: "Insufficient stock for product: " + product.name,
+        });
+      }
+    }
+
+    if (insufficientStock) {
+      return;
+    }
+
+    for (const product of req.body.products) {
+      await db
+        .promise()
+        .query("UPDATE products SET stock = stock - ? WHERE id = ?", [
+          product.quantity,
+          product.id,
+        ]);
+    }
+
+    const [result] = await db
+      .promise()
+      .query(insertQuery, [
         req.body.category,
         JSON.stringify(req.body.products),
         req.body.customer,
@@ -34,23 +49,16 @@ router.post("/add", verifyToken, async (req, res) => {
         req.body.discount,
         new Date(),
         req.body.grandtotal,
-      ],
-      (err, result) => {
-        if (err) {
-          console.log(err);
-          return res.status(500).json({ message: "Error adding new POS" });
-        }
+      ]);
 
-        res.json({ id: result.insertId, message: "Added successfully" });
-      }
-    );
+    res.json({ id: result.insertId, message: "Added successfully" });
   } catch (error) {
     console.log(error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
-
-
+// EDIT POS
 router.put("/edit/:id", verifyToken, async (req, res) => {
   try {
     const insertQuery =
@@ -58,15 +66,14 @@ router.put("/edit/:id", verifyToken, async (req, res) => {
 
     const productsInitial = req.body.productsInitial || [];
 
-    // Iterate through initial products and check for returns
-    productsInitial.forEach((Iproduct) => {
+    let insufficientStock = false;
+    for (const Iproduct of productsInitial) {
       const updatedProduct = req.body.products.find(
         (product) => product.id === Iproduct.id
       );
 
       if (updatedProduct) {
         const quantityDifference = Iproduct.quantity - updatedProduct.quantity;
-
         if (quantityDifference > 0) {
           const returnProduct = {
             ...updatedProduct,
@@ -92,6 +99,20 @@ router.put("/edit/:id", verifyToken, async (req, res) => {
               }
             }
           );
+        } else {
+          const [rows, fields] = await db
+            .promise()
+            .query("SELECT stock FROM products WHERE id = ?", [
+              updatedProduct.id,
+            ]);
+          const availableStock = rows[0].stock;
+
+          if (availableStock < updatedProduct.quantity) {
+            insufficientStock = true;
+            return res.status(400).json({
+              message: "Insufficient stock for product: " + updatedProduct.name,
+            });
+          }
         }
       } else {
         const insertQuery =
@@ -108,10 +129,14 @@ router.put("/edit/:id", verifyToken, async (req, res) => {
           }
         );
       }
-    });
+    }
+
+    if (insufficientStock) {
+      return;
+    }
 
     // Update stock for initial products
-    productsInitial.forEach((product) => {
+    productsInitial.forEach(async (product) => {
       const updateStockQuery =
         "UPDATE products SET stock = stock + ? WHERE id = ?";
       db.query(updateStockQuery, [product.quantity, product.id], (err) => {
@@ -125,7 +150,7 @@ router.put("/edit/:id", verifyToken, async (req, res) => {
     });
 
     // Update stock for current products
-    req.body.products.forEach((product) => {
+    req.body.products.forEach(async (product) => {
       const updateStockQuery =
         "UPDATE products SET stock = stock - ? WHERE id = ?";
       db.query(updateStockQuery, [product.quantity, product.id], (err) => {
@@ -314,11 +339,9 @@ router.get("/view/:fromDate/:toDate", verifyToken, async (req, res) => {
   const skip = (page - 1) * limit;
 
   if (!fromDate || !toDate) {
-    return res
-      .status(400)
-      .json({
-        message: "Please provide both 'fromDate' and 'toDate' parameters",
-      });
+    return res.status(400).json({
+      message: "Please provide both 'fromDate' and 'toDate' parameters",
+    });
   }
 
   // Validate date format (YYYY-MM-DD)

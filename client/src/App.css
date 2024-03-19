@@ -8,7 +8,7 @@
 }
 
 
-.logo{
+.logo {
     font-family: "Courgette", cursive !important;
 }
 
@@ -45,12 +45,14 @@ input[type=number] {
 
 .login_page {
     height: 100vh;
-    background: url("https://plus.unsplash.com/premium_photo-1664476023634-b4b67f558267?q=80&w=1534&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D") no-repeat;
+    /* background: url("https://img.freepik.com/free-photo/side-view-boy-eye-s-checkup_23-2150758560.jpg?w=740&t=st=1710826314~exp=1710826914~hmac=12d7df8ba6df5672dcfd6bd5a007c3d72689733377b2409f0ba51f8cf4129856") no-repeat; */
+    background: rgba(0, 0, 0, 0.3) url("https://plus.unsplash.com/premium_photo-1661281323861-8bf46349f9cf?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D") no-repeat;
+    background-blend-mode: darken;
     background-size: cover;
     background-position: center;
 }
 
-.login_page .form{
+.login_page .form {
     background: rgba(0, 0, 0, 0.7);
     color: white !important;
 }
@@ -66,42 +68,49 @@ input[type=number] {
 .font-bold {
     font-weight: 700 !important;
 }
+
 .loader {
     position: absolute;
     height: 80px;
     width: 80px;
     top: calc(50% - 40px);
     left: calc(50% - 40px);
-  }
-  
+}
+
 
 @media print {
-    .p_none{
+    .p_none {
         display: none !important;
     }
-    .p_shadow{
+
+    .p_shadow {
         box-shadow: none !important;
     }
+
     body {
-      visibility: hidden;
+        visibility: hidden;
     }
-    #content{
-      visibility: visible;
-      position: absolute;
-      left: 0;
-      top: 0;
+
+    #content {
+        visibility: visible;
+        position: absolute;
+        left: 0;
+        top: 0;
     }
-  }
+}
 
 
-  .price {
-    display: inline-flex; /* Ensures both prices are displayed inline */
-  }
-  
-  .original-price {
-    text-decoration: line-through; /* Strikes through the original price */
-  }
-  
-  .discounted-price {
-    color: #EF4444; /* Apply a red color to the discounted price */
-  }
+.price {
+    display: inline-flex;
+    /* Ensures both prices are displayed inline */
+}
+
+.original-price {
+    text-decoration: line-through;
+    /* Strikes through the original price */
+}
+
+.discounted-price {
+    color: #EF4444;
+    /* Apply a red color to the discounted price */
+}

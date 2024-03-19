@@ -44,9 +44,6 @@ function Signin() {
     <>
       <div className="flex justify-center items-center login_page">
         <div className="form flex flex-col  h-fit justify-center rounded-xl align-middle sm:px-10 py-5 md:">
-          <div className="small-logo w-100 justify-center flex ">
-            <img className='w-36' src="/public/images/apwalogo.png" alt="" />
-          </div>
           <h1 className='font-semibold text-2xl p-3 text-center'>Login to your account</h1>
           <p className='text-white'>Welcome back! Please enter your details.</p>
 

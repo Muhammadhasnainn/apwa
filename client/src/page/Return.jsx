@@ -87,7 +87,6 @@ const Return = () => {
                 },
             });
 
-            console.log(pos?.data?.result);
             if (pos?.data?.result.length > 0) {
                 setInputsData({ discount: pos.data.result[0]?.discount, customer: pos.data.result[0]?.customer, category: pos.data.result[0]?.category_id })
                 setSelected(pos.data.result[0]?.products)

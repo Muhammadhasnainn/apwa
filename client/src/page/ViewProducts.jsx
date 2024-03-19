@@ -148,7 +148,12 @@ const ViewProducts = () => {
                             className="block w-full outline-none mt-1 border-gray-300 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2"
                             placeholder="Product Price"
                             value={selected.price}
-                            onChange={(e) => setSelected({ ...selected, price: e.target.value })}
+                            onChange={(e) => {
+                                if (e.target.id === "price" && parseFloat(e.target.value) < 0) {
+                                    return;
+                                }
+                                setSelected({ ...selected, price: e.target.value })
+                            }}
                         />
                     </div>
 
@@ -161,7 +166,12 @@ const ViewProducts = () => {
                             className="block w-full outline-none mt-1 border-gray-300 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2"
                             placeholder="Stock"
                             value={selected.stock}
-                            onChange={(e) => setSelected({ ...selected, stock: e.target.value })}
+                            onChange={(e) => {
+                                if (e.target.id === "stock" && parseFloat(e.target.value) < 0) {
+                                    return;
+                                }
+                                setSelected({ ...selected, stock: e.target.value })
+                            }}
                         />
                     </div>
                     <div className="flex justify-end">
