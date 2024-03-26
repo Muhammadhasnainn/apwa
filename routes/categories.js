@@ -22,7 +22,7 @@ router.post("/add", verifyToken, async (req, res) => {
 
     db.query(insertQuery, [req.body.name, req.body.status], (err, result) => {
       if (err) {
-              logger.info(err);;
+              logger.info(err);
         return res.json({ message: "Error adding new category" });
       }
 

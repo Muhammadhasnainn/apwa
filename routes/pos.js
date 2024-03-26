@@ -3,7 +3,20 @@ const db = require("../config/db");
 
 const { verifyToken } = require("../middlewares/verify");
 
+const winston = require("winston");
+
 const router = express.Router();
+const logsDir = "logs";
+
+const logger = winston.createLogger({
+  transports: [
+    new winston.transports.File({
+      filename: `${logsDir}/app.log`,
+      level: "info",
+    }),
+  ],
+});
+
 
 // Add pos
 router.post("/add", verifyToken, async (req, res) => {
@@ -54,6 +67,7 @@ router.post("/add", verifyToken, async (req, res) => {
     res.json({ id: result.insertId, message: "Added successfully" });
   } catch (error) {
     console.log(error);
+    logger.info(error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
@@ -300,37 +314,6 @@ router.get("/viewfilter", verifyToken, async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
-
-// View Sales of Specific date with Pagination
-// router.get("/view/:date", verifyToken, async (req, res) => {
-//   const selectedDate = req.params.date;
-//   const page = parseInt(req.query.page) || 1;
-//   const limit = parseInt(req.query.limit) || 10;
-//   const skip = (page - 1) * limit;
-
-//   if (!selectedDate) {
-//     return res.json({ message: "Please provide a date parameter" });
-//   }
-
-//   try {
-//     const query =
-//       "SELECT * FROM pos WHERE date LIKE ? ORDER BY date DESC LIMIT ? OFFSET ?";
-//     const fullDateTimeString = `${selectedDate}%`;
-
-//     db.query(query, [fullDateTimeString, limit, skip], (err, result) => {
-//       if (err) {
-//         console.error("Database Error:", err);
-//         return res
-//           .status(500)
-//           .json({ message: "Error getting records from the database" });
-//       }
-
-//       res.json({ result });
-//     });
-//   } catch (error) {
-//     res.status(500).json({ message: "Internal server error" });
-//   }
-// });
 
 router.get("/view/:fromDate/:toDate", verifyToken, async (req, res) => {
   const fromDate = req.params.fromDate;
