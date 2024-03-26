@@ -5,7 +5,6 @@ const jwt = require("jsonwebtoken");
 const router = express.Router();
 const db = require("../config/db");
 
-
 router.post("/login", async (req, res) => {
   res.setHeader("Content-Type", "application/json");
   res.setHeader(
@@ -49,5 +48,7 @@ router.post("/login", async (req, res) => {
     }
   });
 });
+
+
 
 module.exports = router;

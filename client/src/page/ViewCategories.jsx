@@ -16,7 +16,7 @@ const ViewCategories = () => {
                     token: Cookies.get("token"),
                 },
             });
-            setProducts(data.result);
+            setProducts(data?.result);
         } catch (error) {
             console.error("Error fetching data:", error);
         }

@@ -1,25 +1,33 @@
 const express = require("express");
 const { verifyToken } = require("../middlewares/verify");
 const db = require("../config/db");
+const winston = require("winston");
 
 const router = express.Router();
+const logsDir = "logs";
+
+const logger = winston.createLogger({
+  transports: [
+    new winston.transports.File({
+      filename: `${logsDir}/app.log`,
+      level: "info",
+    }),
+  ],
+});
 
 router.post("/add", verifyToken, async (req, res) => {
   try {
-        const insertQuery =
-          "INSERT INTO categories (`name`, `status`) VALUES (?, ?)";
+    const insertQuery =
+      "INSERT INTO categories (`name`, `status`) VALUES (?, ?)";
 
-        db.query(
-          insertQuery,
-          [req.body.name, req.body.status],
-          (err, result) => {
-            if (err) {
-              return res.json({ message: "Error adding new category" });
-            }
+    db.query(insertQuery, [req.body.name, req.body.status], (err, result) => {
+      if (err) {
+              logger.info(err);;
+        return res.json({ message: "Error adding new category" });
+      }
 
-            res.json({ id: result.insertId, message: "Added successfully" });
-          }
-        );
+      res.json({ id: result.insertId, message: "Added successfully" });
+    });
   } catch (error) {
     console.log(error);
   }
@@ -32,6 +40,7 @@ router.post("/delete/:id", verifyToken, async (req, res) => {
 
     db.query(deleteQuery, [categoryId], (err, result) => {
       if (err || result.affectedRows === 0) {
+              logger.info(err);;
         return res.json({ message: "Error deleting category" });
       }
 
@@ -50,6 +59,7 @@ router.put("/edit/:id", verifyToken, async (req, res) => {
 
     db.query(editQuery, [name, status, categoryId], (err, result) => {
       if (err || result.affectedRows === 0) {
+              logger.info(err);;
         return res.json({ message: "Error editing category" });
       }
 
@@ -65,6 +75,7 @@ router.get("/view", verifyToken, async (req, res) => {
 
   db.query(query, [], (err, result) => {
     if (err) {
+            logger.info(err);;
       return res.json({ message: "Error while getting categories" });
     }
 
@@ -72,12 +83,12 @@ router.get("/view", verifyToken, async (req, res) => {
   });
 });
 
-
 router.get("/viewactive", verifyToken, async (req, res) => {
   const query = "SELECT * FROM categories  WHERE status = 0";
 
   db.query(query, [], (err, result) => {
     if (err) {
+            logger.info(err);;
       return res.json({ message: "Error while getting categories" });
     }
 

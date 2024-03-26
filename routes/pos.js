@@ -247,6 +247,7 @@ router.get("/view", verifyToken, async (req, res) => {
 
     db.query(query, [limit, skip], (err, result) => {
       if (err) {
+        console.log(err);
         return res.status(500).json({ message: "Error getting records" });
       }
 
@@ -385,6 +386,7 @@ router.get("/viewpos/:id", verifyToken, async (req, res) => {
 
   db.query(query, [req.params.id], (err, result) => {
     if (err) {
+      console.log(err);
       return res.json({ message: "Error getting records" });
     }
 
@@ -412,6 +414,7 @@ router.get("/viewreturns", verifyToken, async (req, res) => {
 
   db.query(query, [1], (err, result) => {
     if (err) {
+      console.log(err);
       return res.json({ message: "Error getting records" });
     }
 
